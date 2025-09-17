@@ -1,0 +1,6 @@
+.tessl/*
+tessl-config.jsonc
+tessl.log
+AGENTS.md
+CLAUDE.md
+.mcp.json

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connect 5</title>
+    <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body>
+    <div class="game-container">
+        <div class="header">
+            <h1>Connect 5</h1>
+            <button class="info-btn" id="infoBtn">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                    <!-- SVG placeholder - replace with actual info icon -->
+                    <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" fill="none"/>
+                    <path d="M9,9 Q9,6 12,6 Q15,6 15,9 Q15,10 12,10 L12,12 M12,16 L12,16"/>
+                </svg>
+            </button>
+        </div>
+
+        <div class="game-layout">
+            <div class="turn-score-row">
+                <div class="stat-item">
+                    <div class="stat-label">Turn</div>
+                    <div class="stat-value" id="turn">1/7</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-label">Score</div>
+                    <div class="stat-value" id="score">0</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="message info" id="message">Click an empty cell to start typing a word</div>
+        
+        <div class="word-display" id="currentWord"></div>
+
+        <div class="grid-container">
+            <div class="grid" id="grid"></div>
+        </div>
+
+        <div class="controls">
+            <button class="submit-btn" id="submitBtn" disabled>Submit Word</button>
+            <button class="clear-btn" id="clearBtn" disabled>Clear</button>
+            <button class="new-game-btn" id="newGameBtn">New Game</button>
+        </div>
+
+    </div>
+
+    <!-- Instructions Modal -->
+    <div class="modal-overlay" id="modalOverlay" style="display: none;">
+        <div class="modal">
+            <div class="modal-header">
+                <h2>How to Play Connect 5</h2>
+                <button class="modal-close" id="modalClose">×</button>
+            </div>
+            <div class="modal-content">
+                <p><strong>Connect all 5 starting tiles using words within 7 turns.</strong></p>
+                
+                <ul>
+                    <li>Click an empty cell to start typing</li>
+                    <li>Use arrow keys to move your typing position</li>
+                    <li>Click the same cell again to change direction</li>
+                    <li>Words must connect to existing tiles</li>
+                    <li>Earn Scrabble letter points + 10 per unused turn</li>
+                    <li>Starting tiles are black, committed tiles are gray</li>
+                    <li>Words validated against American English dictionary</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script src="assets/js/game.js"></script>
+</body>
+</html>
