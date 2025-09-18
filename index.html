@@ -71,6 +71,13 @@
         </div>
     </div>
 
-    <script src="assets/js/game.js"></script>
+    <script type="module">
+        import { Connect5Game } from './assets/js/Connect5Game.js';
+        
+        // Initialize the game when the page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            const game = new Connect5Game();
+        });
+    </script>
 </body>
 </html>
