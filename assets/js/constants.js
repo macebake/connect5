@@ -11,7 +11,7 @@ export const LETTER_VALUES = {
 
 export const GAME_CONFIG = {
     GRID_SIZE: 10,
-    MAX_TURNS: 7,
+    MAX_TURNS: 6,
     START_TILES_COUNT: 5,
     MIN_WORD_LENGTH: 2,
     BONUS_POINTS_PER_TURN: 10

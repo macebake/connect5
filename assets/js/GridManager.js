@@ -134,57 +134,83 @@ export class GridManager {
         return currentWord.some(w => w.row === row && w.col === col);
     }
 
-    getCompleteWord(currentWord, startRow, startCol, currentDirection) {
-        if (currentWord.length === 0) return '';
-        
-        // Find the full extent of the word by scanning in both directions
-        let startRowScan, startColScan, endRowScan, endColScan;
-        
-        if (currentDirection === DIRECTIONS.HORIZONTAL) {
-            startRowScan = endRowScan = startRow;
-            startColScan = startCol;
-            endColScan = startCol;
-            
-            // Scan left to find the beginning
-            while (startColScan > 0 && this.grid[startRowScan][startColScan - 1]) {
-                startColScan--;
+    getAllFormedWords(currentWord) {
+        const formedWords = [];
+        const wordSet = new Set(); // Prevent duplicates
+
+        // For each new letter placed, check what words it forms
+        for (const letterPos of currentWord) {
+            if (!letterPos.isNew) continue; // Only check newly placed letters
+
+            // Check horizontal word at this position
+            const horizontalWord = this.getWordAt(letterPos.row, letterPos.col, DIRECTIONS.HORIZONTAL);
+            if (horizontalWord.length >= GAME_CONFIG.MIN_WORD_LENGTH && !wordSet.has(horizontalWord)) {
+                formedWords.push(horizontalWord);
+                wordSet.add(horizontalWord);
             }
-            
-            // Scan right to find the end
-            while (endColScan < this.gridSize - 1 && this.grid[endRowScan][endColScan + 1]) {
-                endColScan++;
+
+            // Check vertical word at this position
+            const verticalWord = this.getWordAt(letterPos.row, letterPos.col, DIRECTIONS.VERTICAL);
+            if (verticalWord.length >= GAME_CONFIG.MIN_WORD_LENGTH && !wordSet.has(verticalWord)) {
+                formedWords.push(verticalWord);
+                wordSet.add(verticalWord);
             }
-            
-            // Build the word from left to right
+        }
+
+        return formedWords;
+    }
+
+    getWordAt(row, col, direction) {
+        if (direction === DIRECTIONS.HORIZONTAL) {
+            // Find horizontal word containing this position
+            let startCol = col;
+            let endCol = col;
+
+            // Scan left
+            while (startCol > 0 && this.grid[row][startCol - 1]) {
+                startCol--;
+            }
+
+            // Scan right
+            while (endCol < this.gridSize - 1 && this.grid[row][endCol + 1]) {
+                endCol++;
+            }
+
+            // Build word
             let word = '';
-            for (let col = startColScan; col <= endColScan; col++) {
-                word += this.grid[startRowScan][col];
+            for (let c = startCol; c <= endCol; c++) {
+                word += this.grid[row][c];
             }
             return word;
-            
+
         } else {
-            // Vertical
-            startColScan = endColScan = startCol;
-            startRowScan = startRow;
-            endRowScan = startRow;
-            
-            // Scan up to find the beginning
-            while (startRowScan > 0 && this.grid[startRowScan - 1][startColScan]) {
-                startRowScan--;
+            // Find vertical word containing this position
+            let startRow = row;
+            let endRow = row;
+
+            // Scan up
+            while (startRow > 0 && this.grid[startRow - 1][col]) {
+                startRow--;
             }
-            
-            // Scan down to find the end
-            while (endRowScan < this.gridSize - 1 && this.grid[endRowScan + 1][endColScan]) {
-                endRowScan++;
+
+            // Scan down
+            while (endRow < this.gridSize - 1 && this.grid[endRow + 1][col]) {
+                endRow++;
             }
-            
-            // Build the word from top to bottom
+
+            // Build word
             let word = '';
-            for (let row = startRowScan; row <= endRowScan; row++) {
-                word += this.grid[row][startColScan];
+            for (let r = startRow; r <= endRow; r++) {
+                word += this.grid[r][col];
             }
             return word;
         }
+    }
+
+    // Keep this for compatibility, but now it shows all formed words
+    getCompleteWord(currentWord, startRow, startCol, currentDirection) {
+        const allWords = this.getAllFormedWords(currentWord);
+        return allWords.length > 0 ? allWords.join(' + ') : '';
     }
 
     getIntersectionWords(currentWord, currentDirection) {

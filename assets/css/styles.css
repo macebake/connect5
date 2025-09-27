@@ -99,6 +99,42 @@ h1 {
     color: #fdfcfa;
 }
 
+.emoji-btn {
+    background: none;
+    border: none;
+    width: 32px;
+    height: 32px;
+    font-size: 16px;
+    color: #2c2c2c;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    margin-left: 8px;
+}
+
+.emoji-btn:hover {
+    opacity: 0.6;
+}
+
+.header-nav {
+    position: absolute;
+    top: 0;
+    right: 0;
+    display: flex;
+    align-items: center;
+}
+
+.header-left {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
+}
+
 .game-layout {
     display: flex;
     justify-content: space-between;
@@ -359,6 +395,16 @@ button:disabled {
     color: #fdfcfa;
 }
 
+.reset-btn {
+    border-color: #8B0000;
+    color: #8B0000;
+}
+
+.reset-btn:hover {
+    background: #8B0000;
+    color: #fdfcfa;
+}
+
 .new-game-btn {
     border-color: #2c2c2c;
     color: #2c2c2c;
@@ -438,6 +484,79 @@ button:disabled {
 .rules li {
     padding: 4px 0;
     border-bottom: 1px dotted #d4d0c8;
+}
+
+/* Auth Modal Styles */
+.auth-tabs {
+    display: flex;
+    margin-bottom: 1.5rem;
+    border-bottom: 1px solid #ddd;
+}
+
+.auth-tab {
+    flex: 1;
+    padding: 0.75rem;
+    border: none;
+    background: none;
+    color: #666;
+    cursor: pointer;
+    font-family: Georgia, serif;
+    border-bottom: 2px solid transparent;
+}
+
+.auth-tab:hover:not(.active) {
+    color: #333;
+}
+
+.auth-tab.active {
+    color: #333;
+    border-bottom-color: #333;
+}
+
+.auth-form {
+    display: none;
+}
+
+.auth-form.active {
+    display: block;
+}
+
+.form-group {
+    margin-bottom: 1rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #333;
+    font-weight: bold;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #ddd;
+    font-family: Georgia, serif;
+    font-size: 1rem;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: #333;
+}
+
+.forgot-password-btn {
+    background: none;
+    border: none;
+    color: #666;
+    text-decoration: underline;
+    cursor: pointer;
+    font-family: Georgia, serif;
+    font-size: 0.9rem;
+}
+
+.forgot-password-btn:hover {
+    color: #333;
 }
 
 .rules li:last-child {

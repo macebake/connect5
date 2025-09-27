@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Connect 5 - Daily Challenge</title>
+    <title>Connect 5 - Practice Mode</title>
     <link rel="stylesheet" href="assets/css/styles.css">
     <link rel="stylesheet" href="assets/css/daily.css">
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
@@ -12,9 +12,9 @@
     <div class="game-container">
         <div class="header">
             <div class="header-left">
-                <button class="nav-btn" id="practiceBtn">Practice</button>
+                <button class="nav-btn" id="dailyBtn">Daily</button>
             </div>
-            <h1>Connect 5</h1>
+            <h1>Connect 5 - Practice</h1>
             <div class="header-nav">
                 <button class="emoji-btn" id="infoBtn">ℹ️</button>
                 <button class="emoji-btn" id="leaderboardBtn">🏆</button>
@@ -40,8 +40,8 @@
             </div>
         </div>
 
-        <div class="message info" id="message"></div>
-
+        <div class="message info" id="message">Click an empty cell to start typing a word</div>
+        
         <div class="word-display" id="currentWord"></div>
 
         <div class="grid-container">
@@ -51,21 +51,21 @@
         <div class="controls">
             <button class="submit-btn" id="submitBtn" disabled>Submit Word</button>
             <button class="clear-btn" id="clearBtn" disabled>Clear</button>
-            <button class="reset-btn" id="resetBtn">Reset Puzzle</button>
             <button class="new-game-btn" id="newGameBtn">New Game</button>
         </div>
+
     </div>
 
     <!-- Instructions Modal -->
     <div class="modal-overlay" id="modalOverlay" style="display: none;">
         <div class="modal">
             <div class="modal-header">
-                <h2>How to Play Connect 5 Daily</h2>
+                <h2>How to Play Connect 5</h2>
                 <button class="modal-close" id="modalClose">×</button>
             </div>
             <div class="modal-content">
                 <p><strong>Connect all 5 starting tiles using words within 6 turns.</strong></p>
-
+                
                 <ul>
                     <li>Click an empty cell to start typing</li>
                     <li>Use arrow keys to move your typing position</li>
@@ -75,40 +75,6 @@
                     <li>Starting tiles are black, committed tiles are gray</li>
                     <li>Words validated against American English dictionary</li>
                 </ul>
-
-                <h3>Daily Challenge Rules</h3>
-                <ul>
-                    <li><strong>Same puzzle for everyone:</strong> All players get identical starting tiles</li>
-                    <li><strong>Play without signing in:</strong> Anyone can play today's puzzle</li>
-                    <li><strong>Sign in to compete:</strong> Save your score and appear on the leaderboard</li>
-                    <li><strong>One attempt per account:</strong> Signed-in users cannot restart</li>
-                    <li><strong>New puzzle at midnight GMT</strong></li>
-                </ul>
-            </div>
-        </div>
-    </div>
-
-    <!-- Leaderboard Modal -->
-    <div class="modal-overlay" id="leaderboardModalOverlay" style="display: none;">
-        <div class="modal">
-            <div class="modal-header">
-                <h2>Daily Leaderboard</h2>
-                <button class="modal-close" id="leaderboardModalClose">×</button>
-            </div>
-            <div class="modal-content">
-                <div id="leaderboardContent">
-                    <div class="loading">
-                        <div class="loading-spinner"></div>
-                        Loading leaderboard...
-                    </div>
-                </div>
-                <div id="signUpPrompt" style="display: none;">
-                    <div class="message info" style="margin-top: 1rem;">
-                        <strong>Sign in to save your score and compete!</strong>
-                        <br><br>
-                        <button class="nav-btn" onclick="document.getElementById('leaderboardModalOverlay').style.display='none'; game.showAuthModal()">Sign In / Sign Up</button>
-                    </div>
-                </div>
             </div>
         </div>
     </div>
@@ -166,25 +132,86 @@
     </div>
 
     <script type="module">
-        import { DailyPuzzle } from './assets/js/daily/DailyPuzzle.js';
+        import { Connect5Game } from './assets/js/Connect5Game.js';
 
-        // Initialize the daily puzzle when the page loads
-        document.addEventListener('DOMContentLoaded', async () => {
-            const game = new DailyPuzzle();
+        // Initialize the practice game when the page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            const game = new Connect5Game();
 
             // Add navigation handlers
-            document.getElementById('practiceBtn')?.addEventListener('click', () => {
-                window.location.href = 'practice.html';
+            document.getElementById('dailyBtn')?.addEventListener('click', () => {
+                window.location.href = '/';
             });
 
             document.getElementById('leaderboardBtn')?.addEventListener('click', () => {
-                game.showLeaderboardModal();
+                window.location.href = 'leaderboard.html';
             });
 
             document.getElementById('profileBtn')?.addEventListener('click', () => {
-                game.handleProfileClick();
+                showAuthModal();
             });
         });
+
+        // Simple auth modal for practice page
+        function showAuthModal() {
+            const modal = document.getElementById('authModalOverlay');
+            if (!modal) return;
+            modal.style.display = 'flex';
+
+            // Set up basic modal functionality
+            const closeBtn = document.getElementById('authModalClose');
+            const handleClose = () => {
+                modal.style.display = 'none';
+                clearForms();
+            };
+
+            closeBtn.onclick = handleClose;
+            modal.onclick = (e) => {
+                if (e.target === modal) handleClose();
+            };
+
+            // Tab switching
+            document.querySelectorAll('.auth-tab').forEach(tab => {
+                tab.onclick = () => {
+                    document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
+                    document.querySelectorAll('.auth-form').forEach(f => f.classList.remove('active'));
+
+                    tab.classList.add('active');
+                    document.getElementById(tab.dataset.tab + 'Form').classList.add('active');
+                    document.getElementById('authModalTitle').textContent =
+                        tab.dataset.tab === 'login' ? 'Sign In' : 'Sign Up';
+                };
+            });
+
+            // For practice page, just show message that auth is not available
+            document.getElementById('loginBtn').onclick = () => {
+                showMessage('Authentication not available in practice mode. Go to daily mode to sign in.', 'info');
+            };
+
+            document.getElementById('signupBtn').onclick = () => {
+                showMessage('Authentication not available in practice mode. Go to daily mode to sign up.', 'info');
+            };
+
+            document.getElementById('forgotPasswordBtn').onclick = () => {
+                showMessage('Authentication not available in practice mode. Go to daily mode for password reset.', 'info');
+            };
+        }
+
+        function showMessage(message, type) {
+            const messageEl = document.getElementById('authMessage');
+            messageEl.textContent = message;
+            messageEl.className = `message ${type}`;
+            messageEl.style.display = 'block';
+        }
+
+        function clearForms() {
+            document.getElementById('loginEmail').value = '';
+            document.getElementById('loginPassword').value = '';
+            document.getElementById('signupUsername').value = '';
+            document.getElementById('signupEmail').value = '';
+            document.getElementById('signupPassword').value = '';
+            document.getElementById('authMessage').style.display = 'none';
+        }
     </script>
 </body>
 </html>

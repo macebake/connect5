@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connect 5 Daily</title>
+    <link rel="stylesheet" href="assets/css/styles.css">
+    <link rel="stylesheet" href="assets/css/auth.css">
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+</head>
+<body>
+    <div class="auth-container">
+        <div class="header">
+            <h1>Connect 5 Daily</h1>
+            <p class="tagline">Connect all 5 tiles. New puzzle daily.</p>
+        </div>
+
+        <!-- Landing Page (shown when not authenticated) -->
+        <div id="landingPage" class="page-content">
+            <div class="mode-selection">
+                <h2>Choose Your Mode</h2>
+                <div class="mode-cards">
+                    <div class="mode-card daily">
+                        <h3>🎯 Daily Challenge</h3>
+                        <p>One puzzle per day. Compete on the leaderboard!</p>
+                        <button class="mode-btn" id="playDailyBtn">Play Today's Puzzle</button>
+                    </div>
+                    <div class="mode-card practice">
+                        <h3>🎮 Practice Mode</h3>
+                        <p>Unlimited random puzzles to hone your skills.</p>
+                        <button class="mode-btn" id="playPracticeBtn">Practice Now</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="auth-section">
+                <div class="auth-tabs">
+                    <button class="tab-btn active" data-tab="login">Sign In</button>
+                    <button class="tab-btn" data-tab="register">Sign Up</button>
+                </div>
+
+                <!-- Login Form -->
+                <div id="loginTab" class="auth-form active">
+                    <form id="loginForm">
+                        <div class="form-group">
+                            <label for="loginEmail">Email</label>
+                            <input type="email" id="loginEmail" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="loginPassword">Password</label>
+                            <input type="password" id="loginPassword" required>
+                        </div>
+                        <button type="submit" class="auth-btn">Sign In</button>
+                    </form>
+                </div>
+
+                <!-- Register Form -->
+                <div id="registerTab" class="auth-form">
+                    <form id="registerForm">
+                        <div class="form-group">
+                            <label for="registerUsername">Username</label>
+                            <input type="text" id="registerUsername" required minlength="3" maxlength="20">
+                        </div>
+                        <div class="form-group">
+                            <label for="registerEmail">Email</label>
+                            <input type="email" id="registerEmail" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="registerPassword">Password</label>
+                            <input type="password" id="registerPassword" required minlength="6">
+                        </div>
+                        <button type="submit" class="auth-btn">Sign Up</button>
+                    </form>
+                </div>
+
+                <div id="authMessage" class="message" style="display: none;"></div>
+            </div>
+        </div>
+
+        <!-- User Dashboard (shown when authenticated) -->
+        <div id="userDashboard" class="page-content" style="display: none;">
+            <div class="user-welcome">
+                <h2>Welcome back, <span id="usernameDisplay"></span>!</h2>
+                <div class="user-actions">
+                    <button id="profileBtn" class="nav-btn">Profile</button>
+                    <button id="leaderboardBtn" class="nav-btn">Leaderboard</button>
+                    <button id="signOutBtn" class="nav-btn secondary">Sign Out</button>
+                </div>
+            </div>
+
+            <div class="dashboard-content">
+                <div class="mode-selection">
+                    <div class="mode-cards">
+                        <div class="mode-card daily">
+                            <h3>🎯 Today's Challenge</h3>
+                            <div id="dailyStatus">
+                                <p>Ready to play today's puzzle!</p>
+                            </div>
+                            <button class="mode-btn" id="dailyPuzzleBtn">Play Daily Puzzle</button>
+                        </div>
+                        <div class="mode-card practice">
+                            <h3>🎮 Practice Mode</h3>
+                            <p>Unlimited random puzzles</p>
+                            <button class="mode-btn" id="practiceModeBtn">Practice Now</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="quick-stats">
+                    <h3>Your Stats</h3>
+                    <div class="stats-grid">
+                        <div class="stat-item">
+                            <div class="stat-value" id="totalGames">0</div>
+                            <div class="stat-label">Games Played</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value" id="winRate">0%</div>
+                            <div class="stat-label">Win Rate</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value" id="avgScore">0</div>
+                            <div class="stat-label">Avg Score</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value" id="leaderboardCount">0</div>
+                            <div class="stat-label">Leaderboard Appearances</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Loading State -->
+        <div id="loadingState" class="loading">
+            <div class="loading-spinner"></div>
+            <p>Loading...</p>
+        </div>
+    </div>
+
+    <!-- Instructions Modal -->
+    <div class="modal-overlay" id="modalOverlay" style="display: none;">
+        <div class="modal">
+            <div class="modal-header">
+                <h2>How to Play Connect 5</h2>
+                <button class="modal-close" id="modalClose">×</button>
+            </div>
+            <div class="modal-content">
+                <p><strong>Connect all 5 starting tiles using words within 7 turns.</strong></p>
+
+                <ul>
+                    <li>Click an empty cell to start typing</li>
+                    <li>Use arrow keys to move your typing position</li>
+                    <li>Click the same cell again to change direction</li>
+                    <li>Words must connect to existing tiles</li>
+                    <li>Earn Scrabble letter points + 10 per unused turn</li>
+                    <li>Starting tiles are black, committed tiles are gray</li>
+                    <li>Words validated against American English dictionary</li>
+                </ul>
+
+                <h3>Daily vs Practice Mode</h3>
+                <ul>
+                    <li><strong>Daily:</strong> One attempt per day, compete on leaderboard</li>
+                    <li><strong>Practice:</strong> Unlimited games, no leaderboard</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="assets/js/auth/main.js"></script>
+</body>
+</html>

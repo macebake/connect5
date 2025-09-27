@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connect 5 - Profile</title>
+    <link rel="stylesheet" href="assets/css/styles.css">
+    <link rel="stylesheet" href="assets/css/profile.css">
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+</head>
+<body>
+    <div class="profile-container">
+        <div class="header">
+            <h1>Your Profile</h1>
+            <div class="header-nav">
+                <button class="nav-btn" id="homeBtn">Home</button>
+                <button class="nav-btn" id="leaderboardBtn">Leaderboard</button>
+                <button class="nav-btn" id="playDailyBtn">Play Daily</button>
+            </div>
+        </div>
+
+        <div id="profileMessage" class="message" style="display: none;"></div>
+
+        <!-- Loading State -->
+        <div id="loadingState" class="loading">
+            <div class="loading-spinner"></div>
+            <p>Loading your profile...</p>
+        </div>
+
+        <!-- Profile Content -->
+        <div id="profileContent" style="display: none;">
+            <!-- User Info Section -->
+            <div class="profile-header">
+                <div class="user-avatar">
+                    <div class="avatar-icon">👤</div>
+                </div>
+                <div class="user-info">
+                    <h2 id="userUsername">Loading...</h2>
+                    <p class="join-date">Member since <span id="joinDate">...</span></p>
+                </div>
+            </div>
+
+            <!-- Stats Overview -->
+            <div class="stats-overview">
+                <h3>Statistics Overview</h3>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">🎯</div>
+                        <div class="stat-info">
+                            <div class="stat-value" id="totalDailyGames">0</div>
+                            <div class="stat-label">Daily Games</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">🎮</div>
+                        <div class="stat-info">
+                            <div class="stat-value" id="totalPracticeGames">0</div>
+                            <div class="stat-label">Practice Games</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">🏆</div>
+                        <div class="stat-info">
+                            <div class="stat-value" id="winRate">0%</div>
+                            <div class="stat-label">Win Rate</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">📊</div>
+                        <div class="stat-info">
+                            <div class="stat-value" id="averageScore">0</div>
+                            <div class="stat-label">Average Score</div>
+                        </div>
+                    </div>
+                    <div class="stat-card special">
+                        <div class="stat-icon">🌟</div>
+                        <div class="stat-info">
+                            <div class="stat-value" id="leaderboardAppearances">0</div>
+                            <div class="stat-label">Leaderboard Appearances</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Leaderboard History -->
+            <div class="leaderboard-history">
+                <h3>Leaderboard History</h3>
+                <div class="history-tabs">
+                    <button class="history-tab active" data-tab="achievements">🏅 Achievements</button>
+                    <button class="history-tab" data-tab="history">📅 History</button>
+                </div>
+
+                <div id="achievementsTab" class="history-content active">
+                    <div class="achievements-section">
+                        <div class="achievement-summary">
+                            <div class="achievement-card">
+                                <div class="achievement-icon">🥇</div>
+                                <div class="achievement-info">
+                                    <div class="achievement-value" id="firstPlaces">0</div>
+                                    <div class="achievement-label">First Places</div>
+                                </div>
+                            </div>
+                            <div class="achievement-card">
+                                <div class="achievement-icon">🥈</div>
+                                <div class="achievement-info">
+                                    <div class="achievement-value" id="secondPlaces">0</div>
+                                    <div class="achievement-label">Second Places</div>
+                                </div>
+                            </div>
+                            <div class="achievement-card">
+                                <div class="achievement-icon">🥉</div>
+                                <div class="achievement-info">
+                                    <div class="achievement-value" id="thirdPlaces">0</div>
+                                    <div class="achievement-label">Third Places</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="best-achievements">
+                            <h4>Personal Bests</h4>
+                            <div id="bestAchievements" class="best-list">
+                                <!-- Content populated by JavaScript -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="historyTab" class="history-content">
+                    <div class="history-section">
+                        <div class="history-header">
+                            <h4>Your Daily Leaderboard Appearances</h4>
+                            <p class="history-subtitle">Showing all dates you finished in the top 10</p>
+                        </div>
+                        <div id="leaderboardHistoryList" class="history-list">
+                            <!-- Content populated by JavaScript -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Activity -->
+            <div class="recent-activity">
+                <h3>Recent Activity</h3>
+                <div id="recentGames" class="activity-list">
+                    <!-- Content populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { AuthManager } from './assets/js/auth/AuthManager.js';
+        import { GameAPI } from './assets/js/api/gameApi.js';
+
+        class ProfileManager {
+            constructor() {
+                this.authManager = new AuthManager();
+                this.userStats = null;
+                this.leaderboardHistory = [];
+            }
+
+            async init() {
+                // Check authentication
+                if (!this.authManager.isAuthenticated()) {
+                    window.location.href = '/';
+                    return;
+                }
+
+                await this.loadProfile();
+                this.attachEventListeners();
+            }
+
+            async loadProfile() {
+                try {
+                    const user = this.authManager.getUser();
+                    const profile = this.authManager.getProfile();
+
+                    if (!user || !profile) {
+                        throw new Error('User data not available');
+                    }
+
+                    // Load user stats and leaderboard history
+                    const [stats, history] = await Promise.all([
+                        GameAPI.getUserStats(user.id),
+                        GameAPI.getUserLeaderboardHistory(user.id)
+                    ]);
+
+                    this.userStats = stats;
+                    this.leaderboardHistory = history;
+
+                    this.renderProfile();
+
+                } catch (error) {
+                    console.error('Error loading profile:', error);
+                    this.showError('Failed to load profile data. Please try again.');
+                } finally {
+                    this.hideLoading();
+                }
+            }
+
+            renderProfile() {
+                const profile = this.authManager.getProfile();
+
+                // User info
+                document.getElementById('userUsername').textContent = profile.username;
+                document.getElementById('joinDate').textContent =
+                    new Date(profile.created_at).toLocaleDateString();
+
+                // Stats
+                document.getElementById('totalDailyGames').textContent = this.userStats.total_daily_games;
+                document.getElementById('totalPracticeGames').textContent = this.userStats.total_practice_games;
+                document.getElementById('winRate').textContent = `${this.userStats.winRate}%`;
+                document.getElementById('averageScore').textContent = this.userStats.averageScore.toLocaleString();
+                document.getElementById('leaderboardAppearances').textContent = this.userStats.leaderboard_appearances;
+
+                // Achievements
+                this.renderAchievements();
+
+                // Leaderboard history
+                this.renderLeaderboardHistory();
+
+                // Show content
+                document.getElementById('profileContent').style.display = 'block';
+            }
+
+            renderAchievements() {
+                const firstPlaces = this.leaderboardHistory.filter(h => h.rank === 1).length;
+                const secondPlaces = this.leaderboardHistory.filter(h => h.rank === 2).length;
+                const thirdPlaces = this.leaderboardHistory.filter(h => h.rank === 3).length;
+
+                document.getElementById('firstPlaces').textContent = firstPlaces;
+                document.getElementById('secondPlaces').textContent = secondPlaces;
+                document.getElementById('thirdPlaces').textContent = thirdPlaces;
+
+                // Best achievements
+                const bestScore = Math.max(...this.leaderboardHistory.map(h => h.score), 0);
+                const bestRank = Math.min(...this.leaderboardHistory.map(h => h.rank), Infinity);
+                const bestRankText = bestRank === Infinity ? 'None yet' : `#${bestRank}`;
+
+                document.getElementById('bestAchievements').innerHTML = `
+                    <div class="best-item">
+                        <div class="best-label">Highest Score on Leaderboard</div>
+                        <div class="best-value">${bestScore.toLocaleString()}</div>
+                    </div>
+                    <div class="best-item">
+                        <div class="best-label">Best Daily Rank</div>
+                        <div class="best-value">${bestRankText}</div>
+                    </div>
+                    <div class="best-item">
+                        <div class="best-label">Total Games Played</div>
+                        <div class="best-value">${this.userStats.totalGames}</div>
+                    </div>
+                `;
+            }
+
+            renderLeaderboardHistory() {
+                const container = document.getElementById('leaderboardHistoryList');
+
+                if (this.leaderboardHistory.length === 0) {
+                    container.innerHTML = `
+                        <div class="empty-history">
+                            <p>No leaderboard appearances yet.</p>
+                            <p>Complete daily puzzles to appear on the leaderboard!</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                const historyHTML = this.leaderboardHistory
+                    .sort((a, b) => new Date(b.puzzle_date) - new Date(a.puzzle_date))
+                    .map(entry => `
+                        <div class="history-entry">
+                            <div class="history-date">
+                                ${new Date(entry.puzzle_date).toLocaleDateString()}
+                            </div>
+                            <div class="history-rank ${this.getRankClass(entry.rank)}">
+                                ${this.getRankIcon(entry.rank)} #${entry.rank}
+                            </div>
+                            <div class="history-score">
+                                ${entry.score.toLocaleString()} pts
+                            </div>
+                        </div>
+                    `).join('');
+
+                container.innerHTML = historyHTML;
+            }
+
+            getRankIcon(rank) {
+                switch (rank) {
+                    case 1: return '🥇';
+                    case 2: return '🥈';
+                    case 3: return '🥉';
+                    case 4:
+                    case 5: return '🏅';
+                    default: return '🏆';
+                }
+            }
+
+            getRankClass(rank) {
+                if (rank <= 3) return 'top-three';
+                if (rank <= 5) return 'top-five';
+                return 'top-ten';
+            }
+
+            attachEventListeners() {
+                // Navigation
+                document.getElementById('homeBtn')?.addEventListener('click', () => {
+                    window.location.href = '/';
+                });
+
+                document.getElementById('leaderboardBtn')?.addEventListener('click', () => {
+                    window.location.href = 'leaderboard.html';
+                });
+
+                document.getElementById('playDailyBtn')?.addEventListener('click', () => {
+                    window.location.href = 'daily.html';
+                });
+
+                // Tab switching
+                document.querySelectorAll('.history-tab').forEach(tab => {
+                    tab.addEventListener('click', (e) => {
+                        this.switchTab(e.target.dataset.tab);
+                    });
+                });
+            }
+
+            switchTab(tabName) {
+                // Update tab buttons
+                document.querySelectorAll('.history-tab').forEach(tab => {
+                    tab.classList.remove('active');
+                });
+                document.querySelector(`[data-tab="${tabName}"]`)?.classList.add('active');
+
+                // Update content visibility
+                document.querySelectorAll('.history-content').forEach(content => {
+                    content.classList.remove('active');
+                });
+                document.getElementById(`${tabName}Tab`)?.classList.add('active');
+            }
+
+            hideLoading() {
+                document.getElementById('loadingState').style.display = 'none';
+            }
+
+            showError(message) {
+                const messageEl = document.getElementById('profileMessage');
+                messageEl.textContent = message;
+                messageEl.className = 'message error';
+                messageEl.style.display = 'block';
+            }
+        }
+
+        // Initialize profile
+        document.addEventListener('DOMContentLoaded', () => {
+            new ProfileManager().init();
+        });
+    </script>
+</body>
+</html>

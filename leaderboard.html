@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connect 5 - Leaderboards</title>
+    <link rel="stylesheet" href="assets/css/styles.css">
+    <link rel="stylesheet" href="assets/css/leaderboard.css">
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+</head>
+<body>
+    <div class="leaderboard-container">
+        <div class="header">
+            <h1>Connect 5 Leaderboards</h1>
+            <div class="header-nav">
+                <button class="nav-btn" id="dailyBtn">Daily</button>
+                <button class="nav-btn" id="refreshLeaderboard">Refresh</button>
+            </div>
+        </div>
+
+        <div id="leaderboardMessage" class="message" style="display: none;"></div>
+
+        <!-- User Stats Section -->
+        <div id="userStats" class="user-stats-section" style="display: none;">
+            <!-- Content will be populated by JavaScript -->
+        </div>
+
+        <!-- Leaderboard Tabs -->
+        <div class="leaderboard-tabs">
+            <button class="leaderboard-tab active" data-tab="daily">Today's Top 10</button>
+            <button class="leaderboard-tab" data-tab="allTime">All-Time Champions</button>
+        </div>
+
+        <!-- Daily Leaderboard -->
+        <div id="dailyContent" class="leaderboard-content active">
+            <div class="leaderboard-section">
+                <div id="dailyLeaderboard" class="leaderboard">
+                    <div class="loading">
+                        <div class="loading-spinner"></div>
+                        <p>Loading today's leaderboard...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- All-Time Leaderboard -->
+        <div id="allTimeContent" class="leaderboard-content">
+            <div class="leaderboard-section">
+                <div id="allTimeLeaderboard" class="leaderboard">
+                    <div class="loading">
+                        <div class="loading-spinner"></div>
+                        <p>Loading all-time leaderboard...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer Info -->
+        <div class="leaderboard-info">
+            <div class="info-section">
+                <h3>How Ranking Works</h3>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <h4>Daily Leaderboard</h4>
+                        <ul>
+                            <li>Top 10 scores from today's puzzle</li>
+                            <li>Ranked by score (highest first)</li>
+                            <li>Tiebreaker: earliest completion time</li>
+                            <li>Updates live throughout the day</li>
+                            <li>Frozen at midnight GMT for historical record</li>
+                        </ul>
+                    </div>
+                    <div class="info-item">
+                        <h4>All-Time Champions</h4>
+                        <ul>
+                            <li>Total leaderboard appearances</li>
+                            <li>Only counts if you finish in daily top 10</li>
+                            <li>Ranked by total appearances</li>
+                            <li>Shows true consistency over time</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="info-section">
+                <h3>Scoring System</h3>
+                <div class="scoring-info">
+                    <div class="scoring-item">
+                        <strong>Letter Points:</strong> Standard Scrabble values (A=1, Q=10, etc.)
+                    </div>
+                    <div class="scoring-item">
+                        <strong>Bonus Points:</strong> +10 for each unused turn (if you win)
+                    </div>
+                    <div class="scoring-item">
+                        <strong>Multiple Words:</strong> All intersecting words count toward your score
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { LeaderboardManager } from './assets/js/leaderboard/LeaderboardManager.js';
+
+        // Initialize the leaderboard when the page loads
+        document.addEventListener('DOMContentLoaded', async () => {
+            const leaderboard = new LeaderboardManager();
+            await leaderboard.init();
+
+            // Add navigation handlers
+            document.getElementById('playDailyBtn')?.addEventListener('click', () => {
+                window.location.href = '/';
+            });
+
+            // Clean up on page unload
+            window.addEventListener('beforeunload', () => {
+                leaderboard.destroy();
+            });
+        });
+    </script>
+</body>
+</html>

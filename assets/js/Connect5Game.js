@@ -87,17 +87,9 @@ export class Connect5Game {
             return;
         }
         
-        // Determine possible directions
-        const hasHorizontal = this.canExtendHorizontal(row, col);
-        const hasVertical = this.canExtendVertical(row, col);
-        
-        if (hasHorizontal && !hasVertical) {
-            this.currentDirection = DIRECTIONS.HORIZONTAL;
-        } else if (!hasHorizontal && hasVertical) {
-            this.currentDirection = DIRECTIONS.VERTICAL;
-        } else {
-            this.currentDirection = DIRECTIONS.HORIZONTAL; // Default
-        }
+        // Simple direction selection - default to horizontal
+        // User can click same cell to switch direction
+        this.currentDirection = DIRECTIONS.HORIZONTAL;
         
         this.uiManager.setButtonsEnabled(true, true);
         this.uiManager.showMessage('Type your word. Press Enter to submit or Escape to clear.', MESSAGE_TYPES.INFO);
@@ -112,29 +104,19 @@ export class Connect5Game {
             return;
         }
 
-        const hasHorizontal = this.canExtendHorizontal(this.startRow, this.startCol);
-        const hasVertical = this.canExtendVertical(this.startRow, this.startCol);
-
-        if (this.currentDirection === DIRECTIONS.HORIZONTAL && hasVertical) {
+        // Simple direction toggle
+        if (this.currentDirection === DIRECTIONS.HORIZONTAL) {
             this.currentDirection = DIRECTIONS.VERTICAL;
             this.uiManager.showMessage('Direction changed to vertical. Type your word.', MESSAGE_TYPES.INFO);
-        } else if (this.currentDirection === DIRECTIONS.VERTICAL && hasHorizontal) {
+        } else {
             this.currentDirection = DIRECTIONS.HORIZONTAL;
             this.uiManager.showMessage('Direction changed to horizontal. Type your word.', MESSAGE_TYPES.INFO);
-        } else {
-            this.uiManager.showMessage('Cannot switch to that direction from this position.', MESSAGE_TYPES.ERROR);
         }
 
         this.gridManager.renderGrid(this.currentWord, this.isTyping, this.startRow, this.startCol, this.currentDirection);
     }
 
-    canExtendHorizontal(row, col) {
-        return col < GAME_CONFIG.GRID_SIZE - 1;
-    }
 
-    canExtendVertical(row, col) {
-        return row < GAME_CONFIG.GRID_SIZE - 1;
-    }
 
     handleKeyPress(e) {
         if (!this.isTyping) return;
@@ -300,32 +282,23 @@ export class Connect5Game {
     }
 
     async submitWord() {
-        // Get the complete word first
-        const wordStr = this.gridManager.getCompleteWord(this.currentWord, this.startRow, this.startCol, this.currentDirection);
-        
-        if (wordStr.length < GAME_CONFIG.MIN_WORD_LENGTH) {
-            this.uiManager.showMessage('Word must be at least 2 letters long!', MESSAGE_TYPES.ERROR);
+        // Get all words formed by the new letters
+        const formedWords = this.gridManager.getAllFormedWords(this.currentWord);
+
+        if (formedWords.length === 0) {
+            this.uiManager.showMessage('No valid words formed!', MESSAGE_TYPES.ERROR);
             return;
         }
-        
+
         // Show loading message while validating
-        this.uiManager.showMessage('Validating word...', MESSAGE_TYPES.INFO);
-        
-        const isValid = await this.wordValidator.isValidWord(wordStr);
-        if (!isValid) {
-            this.uiManager.showMessage(`"${wordStr}" is not a valid word!`, MESSAGE_TYPES.ERROR);
-            return;
-        }
-        
-        // Check all intersecting words formed by new letters
-        const intersectionWords = this.gridManager.getIntersectionWords(this.currentWord, this.currentDirection);
-        for (const word of intersectionWords) {
-            if (word.length >= GAME_CONFIG.MIN_WORD_LENGTH) {
-                const isIntersectionValid = await this.wordValidator.isValidWord(word);
-                if (!isIntersectionValid) {
-                    this.uiManager.showMessage(`"${word}" formed by intersection is not a valid word!`, MESSAGE_TYPES.ERROR);
-                    return;
-                }
+        this.uiManager.showMessage('Validating words...', MESSAGE_TYPES.INFO);
+
+        // Validate all formed words
+        for (const word of formedWords) {
+            const isValid = await this.wordValidator.isValidWord(word);
+            if (!isValid) {
+                this.uiManager.showMessage(`"${word}" is not a valid word!`, MESSAGE_TYPES.ERROR);
+                return;
             }
         }
         
@@ -335,20 +308,22 @@ export class Connect5Game {
         }
         
         // Calculate and apply scores
-        const totalTurnScore = this.scoreCalculator.calculateTotalTurnScore(this.currentWord, intersectionWords);
+        const totalTurnScore = this.scoreCalculator.calculateTotalTurnScore(this.currentWord, formedWords);
         this.score += totalTurnScore;
-        
+
         // Mark tiles as committed
         for (const w of this.currentWord) {
             if (w.isNew) {
                 this.gridManager.committedTiles.add(`${w.row}-${w.col}`);
             }
         }
-        
+
         // Create success message
-        let message = `Word "${wordStr}" submitted!`;
-        if (intersectionWords.length > 0) {
-            message += ` Also formed: ${intersectionWords.join(', ')}.`;
+        let message;
+        if (formedWords.length === 1) {
+            message = `Word "${formedWords[0]}" submitted!`;
+        } else {
+            message = `Words "${formedWords.join(', ')}" submitted!`;
         }
         message += ` +${totalTurnScore} points`;
         
@@ -379,7 +354,10 @@ export class Connect5Game {
         const turnsUsed = this.currentTurn - 1;
         const bonusScore = this.scoreCalculator.calculateBonusScore(turnsUsed);
         this.score += bonusScore;
-        
+
+        // Update the score display to show the final score with bonus
+        this.uiManager.updateStats(this.currentTurn, this.maxTurns, this.score);
+
         this.uiManager.showMessage(`🎉 YOU WIN! All tiles connected in ${turnsUsed} turns! Base Score: ${this.score - bonusScore} + Bonus: ${bonusScore} (${GAME_CONFIG.MAX_TURNS - turnsUsed} turns × ${GAME_CONFIG.BONUS_POINTS_PER_TURN}) = Final Score: ${this.score}`, MESSAGE_TYPES.SUCCESS);
         this.uiManager.setButtonsEnabled(false, false);
     }

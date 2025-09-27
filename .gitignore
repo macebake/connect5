@@ -4,3 +4,4 @@ tessl.log
 AGENTS.md
 CLAUDE.md
 .mcp.json
+.env
