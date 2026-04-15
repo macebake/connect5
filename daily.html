@@ -109,22 +109,6 @@
         </div>
     </div>
 
-    <script type="module">
-        import { DailyPuzzle } from './assets/js/daily/DailyPuzzle.js';
-
-        // Initialize the daily puzzle when the page loads
-        document.addEventListener('DOMContentLoaded', async () => {
-            const game = new DailyPuzzle();
-
-            // Add navigation handlers
-            document.getElementById('homeBtn')?.addEventListener('click', () => {
-                window.location.href = 'index.html';
-            });
-
-            document.getElementById('leaderboardBtn')?.addEventListener('click', () => {
-                game.showLeaderboardModal();
-            });
-        });
-    </script>
+    <script type="module" src="assets/js/pages/daily-page.js"></script>
 </body>
 </html>

@@ -1,7 +1,7 @@
-import { AuthManager } from './AuthManager.js';
-import { GameAPI } from '../api/gameApi.js';
+import { AuthManager } from '../services/AuthManager.js';
+import { GameAPI } from '../services/GameAPI.js';
 
-class App {
+class HomePage {
     constructor() {
         this.authManager = new AuthManager();
         this.currentUser = null;
@@ -301,5 +301,5 @@ class App {
 
 // Initialize the app
 document.addEventListener('DOMContentLoaded', () => {
-    new App();
+    new HomePage();
 });

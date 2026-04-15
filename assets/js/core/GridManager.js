@@ -1,4 +1,4 @@
-import { GAME_CONFIG, TILE_LETTERS, LETTER_VALUES, DIRECTIONS } from './constants.js';
+import { GAME_CONFIG, TILE_LETTERS, LETTER_VALUES, DIRECTIONS } from '../app/constants.js';
 
 // Grid management and tile operations for Connect5
 export class GridManager {

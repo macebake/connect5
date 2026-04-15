@@ -99,24 +99,6 @@
         </div>
     </div>
 
-    <script type="module">
-        import { LeaderboardManager } from './assets/js/leaderboard/LeaderboardManager.js';
-
-        // Initialize the leaderboard when the page loads
-        document.addEventListener('DOMContentLoaded', async () => {
-            const leaderboard = new LeaderboardManager();
-            await leaderboard.init();
-
-            // Add navigation handlers
-            document.getElementById('dailyBtn')?.addEventListener('click', () => {
-                window.location.href = 'daily.html';
-            });
-
-            // Clean up on page unload
-            window.addEventListener('beforeunload', () => {
-                leaderboard.destroy();
-            });
-        });
-    </script>
+    <script type="module" src="assets/js/pages/leaderboard-page.js"></script>
 </body>
 </html>

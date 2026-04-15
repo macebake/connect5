@@ -1,4 +1,4 @@
-import { GAME_CONFIG, TILE_LETTERS } from '../constants.js';
+import { GAME_CONFIG, TILE_LETTERS } from '../../app/constants.js';
 
 export class PuzzleGenerator {
     static generateDailyPuzzle(date) {

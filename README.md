@@ -18,7 +18,11 @@ There is no build step. The app is plain HTML, CSS, and browser-side ES modules.
 - [leaderboard.html](/Users/macey/git/connect5/leaderboard.html): leaderboards
 - [profile.html](/Users/macey/git/connect5/profile.html): player profile
 - [reset-password.html](/Users/macey/git/connect5/reset-password.html): password reset flow
-- [assets/js](/Users/macey/git/connect5/assets/js): game logic, auth, API calls
+- [assets/js/app](/Users/macey/git/connect5/assets/js/app): shared config and constants
+- [assets/js/core](/Users/macey/git/connect5/assets/js/core): reusable game engine modules
+- [assets/js/features](/Users/macey/git/connect5/assets/js/features): daily puzzle and leaderboard features
+- [assets/js/services](/Users/macey/git/connect5/assets/js/services): Supabase and data services
+- [assets/js/pages](/Users/macey/git/connect5/assets/js/pages): page-level controllers
 - [database_setup.sql](/Users/macey/git/connect5/database_setup.sql): Supabase schema and helper functions
 
 ## Local Development
@@ -35,7 +39,7 @@ Then open:
 
 ## Configuration
 
-Supabase is configured in [assets/js/config.js](/Users/macey/git/connect5/assets/js/config.js).
+Supabase is configured in [assets/js/app/config.js](/Users/macey/git/connect5/assets/js/app/config.js).
 
 By default the app ships with the current public project URL and anon key. If you want to point the frontend at a different Supabase project without editing the file, define `window.CONNECT5_CONFIG` before loading the app:
 

@@ -1,4 +1,4 @@
-import { LETTER_VALUES, GAME_CONFIG } from './constants.js';
+import { LETTER_VALUES, GAME_CONFIG } from '../app/constants.js';
 
 // Scoring logic for Connect5
 export class ScoreCalculator {

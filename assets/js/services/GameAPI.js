@@ -1,4 +1,4 @@
-import { supabaseClient } from '../auth/supabase-client.js';
+import { supabaseClient } from './supabase-client.js';
 
 export class GameAPI {
     static async getDailyPuzzle(date = null) {

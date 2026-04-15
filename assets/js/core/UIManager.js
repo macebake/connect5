@@ -1,4 +1,4 @@
-import { MESSAGE_TYPES } from './constants.js';
+import { MESSAGE_TYPES } from '../app/constants.js';
 
 // UI management and DOM manipulation for Connect5
 export class UIManager {

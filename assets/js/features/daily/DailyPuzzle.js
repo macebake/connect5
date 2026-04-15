@@ -1,8 +1,8 @@
-import { Connect5Game } from '../Connect5Game.js';
+import { Connect5Game } from '../../core/Connect5Game.js';
 import { PuzzleGenerator } from './PuzzleGenerator.js';
-import { AuthManager } from '../auth/AuthManager.js';
-import { GameAPI } from '../api/gameApi.js';
-import { MESSAGE_TYPES } from '../constants.js';
+import { AuthManager } from '../../services/AuthManager.js';
+import { GameAPI } from '../../services/GameAPI.js';
+import { MESSAGE_TYPES } from '../../app/constants.js';
 
 export class DailyPuzzle extends Connect5Game {
     constructor() {

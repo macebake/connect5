@@ -1,4 +1,4 @@
-import { GAME_CONFIG, DIRECTIONS, MESSAGE_TYPES } from './constants.js';
+import { GAME_CONFIG, DIRECTIONS, MESSAGE_TYPES } from '../app/constants.js';
 import { GridManager } from './GridManager.js';
 import { WordValidator } from './WordValidator.js';
 import { ScoreCalculator } from './ScoreCalculator.js';

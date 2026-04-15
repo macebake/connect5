@@ -1,5 +1,5 @@
-import { GameAPI } from '../api/gameApi.js';
-import { AuthManager } from '../auth/AuthManager.js';
+import { GameAPI } from '../../services/GameAPI.js';
+import { AuthManager } from '../../services/AuthManager.js';
 
 export class LeaderboardManager {
     constructor() {
