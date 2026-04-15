@@ -824,7 +824,13 @@ button:disabled {
         align-items: flex-start;
     }
 
+    .landing-shell {
+        padding: 0;
+    }
+
     .game-container {
+        width: 100vw;
+        max-width: none;
         padding: 14px;
         border-left: none;
         border-right: none;
@@ -853,7 +859,8 @@ button:disabled {
         gap: 8px;
     }
 
-    button {
+    .controls button,
+    .landing-actions button {
         width: 100%;
         min-width: 0;
         padding: 12px 14px;
@@ -870,9 +877,16 @@ button:disabled {
         letter-spacing: 1px;
     }
 
+    .grid-container {
+        margin-left: -14px;
+        margin-right: -14px;
+        padding-left: 7px;
+        padding-right: 7px;
+    }
+
     .grid {
-        --cell-size: min(calc((100vw - 42px) / 10), 34px);
-        padding: 6px;
+        --cell-size: min(calc((100vw - 25px) / 10), 36px);
+        padding: 4px;
     }
 
     .game-layout {
@@ -912,5 +926,19 @@ button:disabled {
     .github-badge {
         width: 100%;
         justify-content: center;
+    }
+
+    .cell.arrow::after {
+        width: 14px;
+        height: 14px;
+        font-size: 12px;
+    }
+
+    .cell.arrow-right::after {
+        right: -7px;
+    }
+
+    .cell.arrow-down::after {
+        bottom: -7px;
     }
 }
