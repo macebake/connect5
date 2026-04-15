@@ -7,7 +7,6 @@
     <link rel="icon" href='data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"%3E%3Ctext y=".9em" font-size="90"%3E%F0%9F%96%90%EF%B8%8F%3C/text%3E%3C/svg%3E'>
     <link rel="stylesheet" href="../assets/css/styles.css">
     <link rel="stylesheet" href="../assets/css/daily.css">
-    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 </head>
 <body>
     <div class="game-container">
@@ -18,13 +17,6 @@
             <h1>Connect 5 - Practice</h1>
             <div class="header-nav">
                 <button class="emoji-btn" id="infoBtn">ℹ️</button>
-                <button class="emoji-btn" id="leaderboardBtn">🏆</button>
-                <button class="emoji-btn" id="profileBtn">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                        <circle cx="12" cy="8" r="4" stroke="currentColor" stroke-width="2" fill="none"/>
-                        <path d="M6 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2" stroke="currentColor" stroke-width="2" fill="none"/>
-                    </svg>
-                </button>
             </div>
         </div>
 
@@ -42,7 +34,6 @@
         </div>
 
         <div class="message info" id="message">Click an empty cell to start typing a word</div>
-        
         <div class="word-display" id="currentWord"></div>
 
         <div class="grid-container">
@@ -54,10 +45,8 @@
             <button class="clear-btn" id="clearBtn" disabled>Clear</button>
             <button class="new-game-btn" id="newGameBtn">New Game</button>
         </div>
-
     </div>
 
-    <!-- Instructions Modal -->
     <div class="modal-overlay" id="modalOverlay" style="display: none;">
         <div class="modal">
             <div class="modal-header">
@@ -66,68 +55,14 @@
             </div>
             <div class="modal-content">
                 <p><strong>Connect all 5 starting tiles using words within 6 turns.</strong></p>
-                
                 <ul>
-                    <li>Click an empty cell to start typing</li>
-                    <li>Use arrow keys to move your typing position</li>
-                    <li>Click the same cell again to change direction</li>
-                    <li>Words must connect to existing tiles</li>
-                    <li>Earn Scrabble letter points + 10 per unused turn</li>
-                    <li>Starting tiles are black, committed tiles are gray</li>
-                    <li>Words validated against American English dictionary</li>
+                    <li>Click an empty cell to start typing.</li>
+                    <li>Use arrow keys to move your starting point before you type.</li>
+                    <li>Click the same cell again to switch direction.</li>
+                    <li>Words must connect to existing letters.</li>
+                    <li>Earn letter points plus 10 bonus points per unused turn.</li>
+                    <li>Practice mode generates a fresh local puzzle whenever you restart.</li>
                 </ul>
-            </div>
-        </div>
-    </div>
-
-    <!-- Auth Modal -->
-    <div class="modal-overlay" id="authModalOverlay" style="display: none;">
-        <div class="modal">
-            <div class="modal-header">
-                <h2 id="authModalTitle">Sign In</h2>
-                <button class="modal-close" id="authModalClose">×</button>
-            </div>
-            <div class="modal-content">
-                <div id="authTabs" class="auth-tabs">
-                    <button class="auth-tab active" data-tab="login">Sign In</button>
-                    <button class="auth-tab" data-tab="signup">Sign Up</button>
-                </div>
-
-                <div id="loginForm" class="auth-form active">
-                    <div class="form-group">
-                        <label for="loginEmail">Email:</label>
-                        <input type="email" id="loginEmail" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="loginPassword">Password:</label>
-                        <input type="password" id="loginPassword" required>
-                    </div>
-                    <button type="button" id="loginBtn" class="nav-btn">Sign In</button>
-                    <div style="text-align: center; margin-top: 1rem;">
-                        <button type="button" id="forgotPasswordBtn" class="forgot-password-btn">Forgot Password?</button>
-                    </div>
-                </div>
-
-                <div id="signupForm" class="auth-form">
-                    <div class="form-group">
-                        <label for="signupUsername">Username:</label>
-                        <input type="text" id="signupUsername" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="signupEmail">Email:</label>
-                        <input type="email" id="signupEmail" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="signupPassword">Password:</label>
-                        <input type="password" id="signupPassword" required>
-                    </div>
-                    <button type="button" id="signupBtn" class="nav-btn">Sign Up</button>
-                    <div style="text-align: center; margin-top: 1rem; color: #666; font-size: 0.8rem; font-style: italic;">
-                        Don't worry — you'll never hear from me unless you forget your password.
-                    </div>
-                </div>
-
-                <div id="authMessage" class="message" style="display: none;"></div>
             </div>
         </div>
     </div>

@@ -1,90 +1,47 @@
 # Connect 5
 
-Connect 5 is a static word game with:
-
-- A daily puzzle backed by Supabase
-- Practice mode with unlimited local play
-- Email/password auth
-- Daily and all-time leaderboards
-- Player profile stats
-
-There is no build step. The app is plain HTML, CSS, and browser-side ES modules.
+Connect 5 is a static daily word game. There is no backend now: the daily board is generated locally from the date, practice mode is unlimited, and result sharing is done with copy/X/Bluesky links.
 
 ## Project Structure
 
-- [index.html](/Users/macey/git/connect5/index.html): landing page and auth/dashboard
+- [index.html](/Users/macey/git/connect5/index.html): landing page
 - [pages/daily.html](/Users/macey/git/connect5/pages/daily.html): daily puzzle
 - [pages/practice.html](/Users/macey/git/connect5/pages/practice.html): practice mode
-- [pages/leaderboard.html](/Users/macey/git/connect5/pages/leaderboard.html): leaderboards
-- [pages/profile.html](/Users/macey/git/connect5/pages/profile.html): player profile
-- [pages/reset-password.html](/Users/macey/git/connect5/pages/reset-password.html): password reset flow
 - [assets/js/app](/Users/macey/git/connect5/assets/js/app): shared config and constants
 - [assets/js/core](/Users/macey/git/connect5/assets/js/core): reusable game engine modules
-- [assets/js/features](/Users/macey/git/connect5/assets/js/features): daily puzzle and leaderboard features
-- [assets/js/services](/Users/macey/git/connect5/assets/js/services): Supabase and data services
+- [assets/js/features/daily](/Users/macey/git/connect5/assets/js/features/daily): daily puzzle generation and daily mode behavior
 - [assets/js/pages](/Users/macey/git/connect5/assets/js/pages): page-level controllers
-- [database_setup.sql](/Users/macey/git/connect5/database_setup.sql): Supabase schema and helper functions
 
 ## Local Development
 
-Use a static file server from the repo root.
+Serve the repo root with any static server.
 
 ```bash
 python3 -m http.server 8000
 ```
 
-Then open:
+Then open [http://localhost:8000/index.html](http://localhost:8000/index.html).
 
-- `http://localhost:8000/index.html`
+## Gameplay
 
-## Configuration
+- `Daily` gives everyone the same puzzle on a given date.
+- `Practice` generates fresh local boards with no save state.
+- Daily results can be copied or shared to X / Bluesky after the game ends.
 
-Supabase is configured in [assets/js/app/config.js](/Users/macey/git/connect5/assets/js/app/config.js).
-
-By default the app ships with the current public project URL and anon key. If you want to point the frontend at a different Supabase project without editing the file, define `window.CONNECT5_CONFIG` before loading the app:
-
-```html
-<script>
-  window.CONNECT5_CONFIG = {
-    SUPABASE_URL: 'https://YOUR_PROJECT.supabase.co',
-    SUPABASE_ANON_KEY: 'YOUR_PUBLIC_ANON_KEY'
-  };
-</script>
-```
-
-This is a browser app, so the anon key is public by design. Do not put a service role key in the frontend.
-
-## Supabase Setup
-
-1. Create a Supabase project.
-2. Open the SQL editor.
-3. Run [database_setup.sql](/Users/macey/git/connect5/database_setup.sql).
-4. In Authentication settings:
-   - Add your deployed site URL to the allowed site URLs.
-   - Add your local dev URL, for example `http://localhost:8000`.
-   - Add `http://localhost:8000/pages/reset-password.html` and your deployed `pages/reset-password.html` URL to the redirect URLs.
+The displayed daily puzzle number starts at `#1` on April 15, 2026.
 
 ## Deployment
 
-This repo can be deployed to any static host that serves the repository root as the site root:
+This repo deploys as plain static files. GitHub Pages is enough.
 
-- Netlify
-- Vercel
-- Cloudflare Pages
-- GitHub Pages
-- Supabase Storage + CDN
+### GitHub Pages
 
-The important part is that `index.html` is served at the site root.
-
-### Deploy Checklist
-
-1. Publish the repo root as static files.
-2. Confirm `index.html` is the landing page.
-3. Confirm `pages/daily.html`, `pages/practice.html`, `pages/leaderboard.html`, `pages/profile.html`, and `pages/reset-password.html` are all reachable.
-4. Update Supabase auth settings with your production site URL and password reset redirect URL.
-5. Run the optional `pg_cron` schedule statements from [database_setup.sql](/Users/macey/git/connect5/database_setup.sql) so daily puzzles and leaderboard snapshots keep running automatically.
+1. Publish the repo root from `main`.
+2. Keep [CNAME](/Users/macey/git/connect5/CNAME) set to `connect5.co`.
+3. Point your DNS at GitHub Pages.
+4. Wait for TLS provisioning, then enable HTTPS in GitHub Pages settings.
 
 ## Notes
 
-- The app uses UTC dates for the daily puzzle key, which matches the database scheduling examples.
-- The dictionary check uses `dictionaryapi.dev`. If that service is unavailable, gameplay should still remain usable, but production quality is better if you eventually replace it with a first-party word list or Supabase-hosted dictionary source.
+- The daily puzzle is deterministic client-side, so there is no server state to maintain.
+- Word validation still uses `dictionaryapi.dev`. If that service is slow or unavailable, replacing it with a bundled word list would make the game more reliable.

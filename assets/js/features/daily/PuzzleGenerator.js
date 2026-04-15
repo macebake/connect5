@@ -1,6 +1,10 @@
 import { GAME_CONFIG, TILE_LETTERS } from '../../app/constants.js';
 
 export class PuzzleGenerator {
+    static getCurrentDailyDate() {
+        return new Date().toISOString().split('T')[0];
+    }
+
     static generateDailyPuzzle(date) {
         // Create a seed from the date
         const dateStr = typeof date === 'string' ? date : date.toISOString().split('T')[0];
@@ -102,7 +106,7 @@ export class PuzzleGenerator {
 
     // Helper method to get today's puzzle
     static getTodaysPuzzle() {
-        const today = new Date().toISOString().split('T')[0];
+        const today = this.getCurrentDailyDate();
         return this.generateDailyPuzzle(today);
     }
 
