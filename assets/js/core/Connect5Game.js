@@ -17,6 +17,7 @@ export class Connect5Game {
         this.startRow = null;
         this.startCol = null;
         this.isTyping = false;
+        this.gameOver = false;
         
         // Initialize managers
         this.uiManager = new UIManager();
@@ -30,6 +31,7 @@ export class Connect5Game {
     }
 
     init() {
+        this.gameOver = false;
         this.gridManager.placeStartTiles();
         this.gridManager.renderGrid(this.currentWord, this.isTyping, this.startRow, this.startCol, this.currentDirection);
         this.attachEventListeners();
@@ -50,6 +52,7 @@ export class Connect5Game {
 
     handleCellClick(e) {
         if (!e.target.classList.contains('cell')) return;
+        if (this.gameOver) return;
         if (this.currentTurn > this.maxTurns) return;
         
         const row = parseInt(e.target.dataset.row);
@@ -80,6 +83,8 @@ export class Connect5Game {
     }
 
     startTyping(row, col) {
+        if (this.gameOver) return;
+
         this.isTyping = true;
         this.startRow = row;
         this.startCol = col;
@@ -123,6 +128,7 @@ export class Connect5Game {
 
 
     handleKeyPress(e) {
+        if (this.gameOver) return;
         if (!this.isTyping) return;
         
         if (e.key === 'Enter') {
@@ -286,6 +292,8 @@ export class Connect5Game {
     }
 
     async submitWord() {
+        if (this.gameOver) return;
+
         // Get all words formed by the new letters
         const formedWords = this.gridManager.getAllFormedWords(this.currentWord);
 
@@ -356,17 +364,36 @@ export class Connect5Game {
 
     winGame() {
         const turnsUsed = this.currentTurn - 1;
+        const turnsRemaining = GAME_CONFIG.MAX_TURNS - turnsUsed;
         const bonusScore = this.scoreCalculator.calculateBonusScore(turnsUsed);
+        const baseScore = this.score;
         this.score += bonusScore;
+        this.gameOver = true;
+        this.isTyping = false;
+        this.currentWord = [];
+        this.currentDirection = null;
+        this.startRow = null;
+        this.startCol = null;
 
         // Update the score display to show the final score with bonus
         this.uiManager.updateStats(this.currentTurn, this.maxTurns, this.score);
+        this.uiManager.updateCurrentWordDisplay('');
+        this.gridManager.renderGrid(this.currentWord, this.isTyping, this.startRow, this.startCol, this.currentDirection);
 
-        this.uiManager.showMessage(`🎉 YOU WIN! All tiles connected in ${turnsUsed} turns! Base Score: ${this.score - bonusScore} + Bonus: ${bonusScore} (${GAME_CONFIG.MAX_TURNS - turnsUsed} turns × ${GAME_CONFIG.BONUS_POINTS_PER_TURN}) = Final Score: ${this.score}`, MESSAGE_TYPES.SUCCESS);
+        const remainingTurnsLabel = turnsRemaining === 1 ? '1 remaining turn' : `${turnsRemaining} remaining turns`;
+        this.uiManager.showMessage(`🎉 YOU WIN! All tiles connected in ${turnsUsed} turns. Base score: ${baseScore} + Bonus: ${bonusScore} (${remainingTurnsLabel}) = Final score: ${this.score}`, MESSAGE_TYPES.SUCCESS);
         this.uiManager.setButtonsEnabled(false, false);
     }
 
     endGame() {
+        this.gameOver = true;
+        this.isTyping = false;
+        this.currentWord = [];
+        this.currentDirection = null;
+        this.startRow = null;
+        this.startCol = null;
+        this.uiManager.updateCurrentWordDisplay('');
+        this.gridManager.renderGrid(this.currentWord, this.isTyping, this.startRow, this.startCol, this.currentDirection);
         this.uiManager.showMessage(`💀 YOU LOSE! Failed to connect all tiles in ${GAME_CONFIG.MAX_TURNS} turns. Final Score: ${this.score}`, MESSAGE_TYPES.ERROR);
         this.uiManager.setButtonsEnabled(false, false);
     }
@@ -379,6 +406,7 @@ export class Connect5Game {
         this.startRow = null;
         this.startCol = null;
         this.isTyping = false;
+        this.gameOver = false;
         
         this.gridManager.reset();
         this.init();
