@@ -14,6 +14,7 @@ export class DailyPuzzle extends Connect5Game {
         this.puzzleDate = new Date().toISOString().split('T')[0];
         this.dailyAttempt = null;
         this.isDaily = true;
+        this.puzzleEpoch = '2026-04-15';
 
         // Override some parent properties
         this.gameStarted = false;
@@ -24,10 +25,10 @@ export class DailyPuzzle extends Connect5Game {
 
     async init() {
         try {
-            await this.authManager.ready;
-
-            // Load today's puzzle
-            await this.loadDailyPuzzle();
+            await Promise.all([
+                this.authManager.ready,
+                this.loadDailyPuzzle()
+            ]);
 
             // Check if user has already attempted today's puzzle (only if authenticated)
             if (this.authManager.isAuthenticated()) {
@@ -77,8 +78,7 @@ export class DailyPuzzle extends Connect5Game {
         this.gridManager.renderGrid(this.currentWord, this.isTyping, this.startRow, this.startCol, this.currentDirection);
         this.attachEventListeners();
         this.uiManager.updateStats(this.currentTurn, this.maxTurns, this.score);
-
-
+        this.uiManager.showMessage('Click an empty cell to start typing a word', MESSAGE_TYPES.INFO);
         this.addDailyGameModeIndicator();
         this.removeNewGameButton();
     }
@@ -100,8 +100,7 @@ export class DailyPuzzle extends Connect5Game {
         // Add visual indicator that this is daily mode
         const header = document.querySelector('.header h1');
         if (header && !header.textContent.includes('#')) {
-            const date = new Date(this.puzzleDate);
-            const dayNumber = Math.floor((date - new Date('2024-01-01')) / (1000 * 60 * 60 * 24)) + 1;
+            const dayNumber = this.getPuzzleNumber();
             header.textContent = `Connect 5 #${dayNumber}`;
         }
 
@@ -213,8 +212,7 @@ export class DailyPuzzle extends Connect5Game {
 
         const profile = this.authManager.getProfile();
         const username = profile?.username || 'Anonymous';
-        const date = new Date(this.puzzleDate);
-        const dayNumber = Math.floor((date - new Date('2024-01-01')) / (1000 * 60 * 60 * 24)) + 1;
+        const dayNumber = this.getPuzzleNumber();
 
         const status = completed ? 'Victory! 🎉' : 'Incomplete 💀';
         const starRating = this.getStarRating(turnsUsed, completed);
@@ -255,6 +253,13 @@ Play today: ${buildAppUrl('pages/daily.html')}
 
         const starsCount = Math.max(0, this.maxTurns - turnsUsed + 1);
         return '⭐'.repeat(Math.min(starsCount, 5));
+    }
+
+    getPuzzleNumber() {
+        const currentDate = new Date(`${this.puzzleDate}T00:00:00Z`);
+        const epochDate = new Date(`${this.puzzleEpoch}T00:00:00Z`);
+        const dayNumber = Math.floor((currentDate - epochDate) / (1000 * 60 * 60 * 24)) + 1;
+        return Math.max(1, dayNumber);
     }
 
     async winGame() {
