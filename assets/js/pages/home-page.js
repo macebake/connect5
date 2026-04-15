@@ -1,3 +1,4 @@
+import { buildAppUrl } from '../app/config.js';
 import { AuthManager } from '../services/AuthManager.js';
 import { GameAPI } from '../services/GameAPI.js';
 
@@ -137,28 +138,28 @@ class HomePage {
         });
 
         document.getElementById('profileBtn')?.addEventListener('click', () => {
-            window.location.href = 'profile.html';
+            window.location.href = buildAppUrl('pages/profile.html');
         });
 
         document.getElementById('leaderboardBtn')?.addEventListener('click', () => {
-            window.location.href = 'leaderboard.html';
+            window.location.href = buildAppUrl('pages/leaderboard.html');
         });
 
         // Game mode buttons
         document.getElementById('playDailyBtn')?.addEventListener('click', () => {
-            window.location.href = 'daily.html';
+            window.location.href = buildAppUrl('pages/daily.html');
         });
 
         document.getElementById('playPracticeBtn')?.addEventListener('click', () => {
-            window.location.href = 'practice.html';
+            window.location.href = buildAppUrl('pages/practice.html');
         });
 
         document.getElementById('dailyPuzzleBtn')?.addEventListener('click', () => {
-            window.location.href = 'daily.html';
+            window.location.href = buildAppUrl('pages/daily.html');
         });
 
         document.getElementById('practiceModeBtn')?.addEventListener('click', () => {
-            window.location.href = 'practice.html';
+            window.location.href = buildAppUrl('pages/practice.html');
         });
 
         // Modal handling

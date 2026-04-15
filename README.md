@@ -13,11 +13,11 @@ There is no build step. The app is plain HTML, CSS, and browser-side ES modules.
 ## Project Structure
 
 - [index.html](/Users/macey/git/connect5/index.html): landing page and auth/dashboard
-- [daily.html](/Users/macey/git/connect5/daily.html): daily puzzle
-- [practice.html](/Users/macey/git/connect5/practice.html): practice mode
-- [leaderboard.html](/Users/macey/git/connect5/leaderboard.html): leaderboards
-- [profile.html](/Users/macey/git/connect5/profile.html): player profile
-- [reset-password.html](/Users/macey/git/connect5/reset-password.html): password reset flow
+- [pages/daily.html](/Users/macey/git/connect5/pages/daily.html): daily puzzle
+- [pages/practice.html](/Users/macey/git/connect5/pages/practice.html): practice mode
+- [pages/leaderboard.html](/Users/macey/git/connect5/pages/leaderboard.html): leaderboards
+- [pages/profile.html](/Users/macey/git/connect5/pages/profile.html): player profile
+- [pages/reset-password.html](/Users/macey/git/connect5/pages/reset-password.html): password reset flow
 - [assets/js/app](/Users/macey/git/connect5/assets/js/app): shared config and constants
 - [assets/js/core](/Users/macey/git/connect5/assets/js/core): reusable game engine modules
 - [assets/js/features](/Users/macey/git/connect5/assets/js/features): daily puzzle and leaderboard features
@@ -62,7 +62,7 @@ This is a browser app, so the anon key is public by design. Do not put a service
 4. In Authentication settings:
    - Add your deployed site URL to the allowed site URLs.
    - Add your local dev URL, for example `http://localhost:8000`.
-   - Add `http://localhost:8000/reset-password.html` and your deployed `reset-password.html` URL to the redirect URLs.
+   - Add `http://localhost:8000/pages/reset-password.html` and your deployed `pages/reset-password.html` URL to the redirect URLs.
 
 ## Deployment
 
@@ -80,7 +80,7 @@ The important part is that `index.html` is served at the site root.
 
 1. Publish the repo root as static files.
 2. Confirm `index.html` is the landing page.
-3. Confirm `daily.html`, `practice.html`, `leaderboard.html`, `profile.html`, and `reset-password.html` are all reachable.
+3. Confirm `pages/daily.html`, `pages/practice.html`, `pages/leaderboard.html`, `pages/profile.html`, and `pages/reset-password.html` are all reachable.
 4. Update Supabase auth settings with your production site URL and password reset redirect URL.
 5. Run the optional `pg_cron` schedule statements from [database_setup.sql](/Users/macey/git/connect5/database_setup.sql) so daily puzzles and leaderboard snapshots keep running automatically.
 

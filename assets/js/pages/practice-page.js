@@ -1,3 +1,4 @@
+import { buildAppUrl } from '../app/config.js';
 import { Connect5Game } from '../core/Connect5Game.js';
 
 function showMessage(message, type) {
@@ -61,11 +62,11 @@ document.addEventListener('DOMContentLoaded', () => {
     new Connect5Game();
 
     document.getElementById('dailyBtn')?.addEventListener('click', () => {
-        window.location.href = 'daily.html';
+        window.location.href = buildAppUrl('pages/daily.html');
     });
 
     document.getElementById('leaderboardBtn')?.addEventListener('click', () => {
-        window.location.href = 'leaderboard.html';
+        window.location.href = buildAppUrl('pages/leaderboard.html');
     });
 
     document.getElementById('profileBtn')?.addEventListener('click', () => {

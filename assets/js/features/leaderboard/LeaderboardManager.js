@@ -1,3 +1,4 @@
+import { buildAppUrl } from '../../app/config.js';
 import { GameAPI } from '../../services/GameAPI.js';
 import { AuthManager } from '../../services/AuthManager.js';
 
@@ -248,7 +249,7 @@ export class LeaderboardManager {
         const dailyBtn = document.getElementById('dailyBtn');
         if (dailyBtn) {
             dailyBtn.addEventListener('click', () => {
-                window.location.href = 'daily.html';
+                window.location.href = buildAppUrl('pages/daily.html');
             });
         }
     }

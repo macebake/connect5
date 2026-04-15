@@ -1,3 +1,4 @@
+import { buildAppUrl } from '../app/config.js';
 import { AuthManager } from '../services/AuthManager.js';
 import { GameAPI } from '../services/GameAPI.js';
 
@@ -12,7 +13,7 @@ class ProfilePage {
         await this.authManager.ready;
 
         if (!this.authManager.isAuthenticated()) {
-            window.location.href = 'index.html?tab=login';
+            window.location.href = buildAppUrl('index.html?tab=login');
             return;
         }
 
@@ -141,15 +142,15 @@ class ProfilePage {
 
     attachEventListeners() {
         document.getElementById('homeBtn')?.addEventListener('click', () => {
-            window.location.href = 'index.html';
+            window.location.href = buildAppUrl('index.html');
         });
 
         document.getElementById('leaderboardBtn')?.addEventListener('click', () => {
-            window.location.href = 'leaderboard.html';
+            window.location.href = buildAppUrl('pages/leaderboard.html');
         });
 
         document.getElementById('playDailyBtn')?.addEventListener('click', () => {
-            window.location.href = 'daily.html';
+            window.location.href = buildAppUrl('pages/daily.html');
         });
 
         document.querySelectorAll('.history-tab').forEach((tab) => {

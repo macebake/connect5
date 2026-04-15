@@ -1,3 +1,4 @@
+import { buildAppUrl } from '../app/config.js';
 import { supabaseClient } from '../services/supabase-client.js';
 
 const resetForm = document.getElementById('resetForm');
@@ -56,7 +57,7 @@ resetForm.addEventListener('submit', async (event) => {
 
         showMessage('Password updated. Redirecting to sign in...', 'success');
         setTimeout(() => {
-            window.location.href = 'index.html?tab=login';
+            window.location.href = buildAppUrl('index.html?tab=login');
         }, 1500);
     } catch (error) {
         showMessage(error.message || 'Failed to update your password.', 'error');

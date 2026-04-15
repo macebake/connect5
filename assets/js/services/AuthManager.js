@@ -1,3 +1,4 @@
+import { buildAppUrl } from '../app/config.js';
 import { supabaseClient } from './supabase-client.js';
 
 export class AuthManager {
@@ -103,7 +104,7 @@ export class AuthManager {
 
     async resetPassword(email) {
         try {
-            const redirectTo = new URL('reset-password.html', window.location.href).toString();
+            const redirectTo = buildAppUrl('pages/reset-password.html');
             const { error } = await supabaseClient.auth.resetPasswordForEmail(email, { redirectTo });
             if (error) throw error;
 
@@ -169,7 +170,7 @@ export class AuthManager {
 
     requireAuth() {
         if (!this.isAuthenticated()) {
-            window.location.href = 'index.html?tab=login';
+            window.location.href = buildAppUrl('index.html?tab=login');
             return false;
         }
         return true;

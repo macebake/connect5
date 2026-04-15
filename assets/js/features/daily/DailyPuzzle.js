@@ -1,4 +1,5 @@
 import { Connect5Game } from '../../core/Connect5Game.js';
+import { buildAppUrl } from '../../app/config.js';
 import { PuzzleGenerator } from './PuzzleGenerator.js';
 import { AuthManager } from '../../services/AuthManager.js';
 import { GameAPI } from '../../services/GameAPI.js';
@@ -170,7 +171,7 @@ export class DailyPuzzle extends Connect5Game {
             leaderboardBtn.className = 'clear-btn';
             leaderboardBtn.textContent = 'View Leaderboard';
             leaderboardBtn.addEventListener('click', () => {
-                window.location.href = 'leaderboard.html';
+                window.location.href = buildAppUrl('pages/leaderboard.html');
             });
             controls.appendChild(leaderboardBtn);
         } else {
@@ -179,7 +180,7 @@ export class DailyPuzzle extends Connect5Game {
             signInBtn.className = 'clear-btn';
             signInBtn.textContent = 'Sign In to Save Score';
             signInBtn.addEventListener('click', () => {
-                window.location.href = 'index.html?tab=login';
+                window.location.href = buildAppUrl('index.html?tab=login');
             });
             controls.appendChild(signInBtn);
         }
@@ -189,7 +190,7 @@ export class DailyPuzzle extends Connect5Game {
         homeBtn.className = 'new-game-btn';
         homeBtn.textContent = 'Back to Home';
         homeBtn.addEventListener('click', () => {
-            window.location.href = 'index.html';
+            window.location.href = buildAppUrl('index.html');
         });
         controls.appendChild(homeBtn);
     }
@@ -223,7 +224,7 @@ Score: ${score} points
 Turns: ${turnsUsed}/6 ${starRating}
 Status: ${status}
 
-        Play today: ${new URL('daily.html', window.location.href).toString()}
+Play today: ${buildAppUrl('pages/daily.html')}
 #Connect5Daily`;
 
         try {
@@ -433,7 +434,7 @@ Status: ${status}
 
     handleProfileClick() {
         if (this.authManager.isAuthenticated()) {
-            window.location.href = 'profile.html';
+            window.location.href = buildAppUrl('pages/profile.html');
         } else {
             this.showAuthModal();
         }

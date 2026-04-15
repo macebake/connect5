@@ -1,3 +1,4 @@
+import { buildAppUrl } from '../app/config.js';
 import { LeaderboardManager } from '../features/leaderboard/LeaderboardManager.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
@@ -5,7 +6,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     await leaderboard.init();
 
     document.getElementById('dailyBtn')?.addEventListener('click', () => {
-        window.location.href = 'daily.html';
+        window.location.href = buildAppUrl('pages/daily.html');
     });
 
     window.addEventListener('beforeunload', () => {
