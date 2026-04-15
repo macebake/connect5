@@ -3,30 +3,30 @@
   "puzzleNumber": 1,
   "startTiles": [
     {
-      "row": 4,
-      "col": 2,
-      "letter": "X"
-    },
-    {
-      "row": 9,
-      "col": 4,
-      "letter": "L"
-    },
-    {
-      "row": 1,
+      "row": 6,
       "col": 9,
-      "letter": "W"
+      "letter": "S"
     },
     {
-      "row": 5,
-      "col": 6,
+      "row": 7,
+      "col": 4,
       "letter": "K"
     },
     {
-      "row": 0,
-      "col": 0,
+      "row": 5,
+      "col": 1,
+      "letter": "E"
+    },
+    {
+      "row": 4,
+      "col": 6,
       "letter": "J"
+    },
+    {
+      "row": 6,
+      "col": 7,
+      "letter": "B"
     }
   ],
-  "generatedAt": "2026-04-15T14:55:05.704Z"
+  "generatedAt": "2026-04-15T15:03:38.372Z"
 }
