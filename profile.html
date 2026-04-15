@@ -160,9 +160,10 @@
             }
 
             async init() {
-                // Check authentication
+                await this.authManager.ready;
+
                 if (!this.authManager.isAuthenticated()) {
-                    window.location.href = '/';
+                    window.location.href = 'index.html?tab=login';
                     return;
                 }
 
@@ -305,7 +306,7 @@
             attachEventListeners() {
                 // Navigation
                 document.getElementById('homeBtn')?.addEventListener('click', () => {
-                    window.location.href = '/';
+                    window.location.href = 'index.html';
                 });
 
                 document.getElementById('leaderboardBtn')?.addEventListener('click', () => {

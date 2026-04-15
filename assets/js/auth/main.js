@@ -19,9 +19,9 @@ class App {
             this.handleAuthStateChange(event, session);
         });
 
-        // Initialize current session
-        await this.authManager.initSession();
+        await this.authManager.ready;
         this.currentUser = this.authManager.getUser();
+        this.applyRequestedTab();
 
         // Hide loading and show appropriate content
         this.showLoading(false);
@@ -60,6 +60,13 @@ class App {
         }
     }
 
+    applyRequestedTab() {
+        const requestedTab = new URLSearchParams(window.location.search).get('tab');
+        if (requestedTab === 'login' || requestedTab === 'register') {
+            this.switchTab(requestedTab);
+        }
+    }
+
     async loadUserData() {
         if (!this.currentUser) return;
 
@@ -93,7 +100,7 @@ class App {
                 if (attempt.completed) {
                     dailyStatus.innerHTML = `<p class="completed">Today's puzzle completed! Score: ${attempt.score}</p>`;
                     dailyBtn.textContent = 'View Today\'s Result';
-                    dailyBtn.disabled = true;
+                    dailyBtn.disabled = false;
                 } else {
                     dailyStatus.innerHTML = '<p>Resume today\'s puzzle</p>';
                     dailyBtn.textContent = 'Continue Daily Puzzle';
@@ -171,13 +178,13 @@ class App {
         document.querySelectorAll('.tab-btn').forEach(btn => {
             btn.classList.remove('active');
         });
-        document.querySelector(`[data-tab="${tabName}"]`).classList.add('active');
+        document.querySelector(`[data-tab="${tabName}"]`)?.classList.add('active');
 
         // Update form visibility
         document.querySelectorAll('.auth-form').forEach(form => {
             form.classList.remove('active');
         });
-        document.getElementById(`${tabName}Tab`).classList.add('active');
+        document.getElementById(`${tabName}Tab`)?.classList.add('active');
 
         // Clear any messages
         this.hideAuthMessage();

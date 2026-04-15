@@ -59,6 +59,7 @@ export class GameAPI {
 
     static async submitDailyAttempt(userId, puzzleDate, score, completed, turnsUsed) {
         try {
+            const existingAttempt = await this.getDailyAttempt(userId, puzzleDate);
             const { data, error } = await supabaseClient
                 .from('daily_attempts')
                 .upsert({
@@ -66,15 +67,21 @@ export class GameAPI {
                     puzzle_date: puzzleDate,
                     score: score,
                     completed: completed,
-                    turns_used: turnsUsed
+                    turns_used: turnsUsed,
+                    completed_at: new Date().toISOString()
+                }, {
+                    onConflict: 'user_id,puzzle_date'
                 })
                 .select()
                 .single();
 
             if (error) throw error;
 
-            // Update user profile stats
-            await this.updateUserStats(userId, score, completed, true);
+            await this.updateUserStats(userId, {
+                scoreDelta: score - (existingAttempt?.score || 0),
+                dailyGamesDelta: existingAttempt ? 0 : 1,
+                winsDelta: completed && !existingAttempt?.completed ? 1 : 0
+            });
 
             return data;
         } catch (error) {
@@ -98,8 +105,11 @@ export class GameAPI {
 
             if (error) throw error;
 
-            // Update user profile stats
-            await this.updateUserStats(userId, score, completed, false);
+            await this.updateUserStats(userId, {
+                scoreDelta: score,
+                practiceGamesDelta: 1,
+                winsDelta: completed ? 1 : 0
+            });
 
             return data;
         } catch (error) {
@@ -108,7 +118,12 @@ export class GameAPI {
         }
     }
 
-    static async updateUserStats(userId, score, completed, isDaily) {
+    static async updateUserStats(userId, {
+        scoreDelta = 0,
+        dailyGamesDelta = 0,
+        practiceGamesDelta = 0,
+        winsDelta = 0
+    }) {
         try {
             // Get current profile
             const { data: profile, error: fetchError } = await supabaseClient
@@ -121,18 +136,11 @@ export class GameAPI {
 
             // Calculate new stats
             const updates = {
-                total_score_sum: profile.total_score_sum + score
+                total_score_sum: profile.total_score_sum + scoreDelta,
+                total_daily_games: profile.total_daily_games + dailyGamesDelta,
+                total_practice_games: profile.total_practice_games + practiceGamesDelta,
+                wins: profile.wins + winsDelta
             };
-
-            if (isDaily) {
-                updates.total_daily_games = profile.total_daily_games + 1;
-            } else {
-                updates.total_practice_games = profile.total_practice_games + 1;
-            }
-
-            if (completed) {
-                updates.wins = profile.wins + 1;
-            }
 
             const { error: updateError } = await supabaseClient
                 .from('profiles')
@@ -155,14 +163,14 @@ export class GameAPI {
                 .select(`
                     user_id,
                     score,
-                    created_at,
+                    completed_at,
                     turns_used,
                     profiles!inner(username)
                 `)
                 .eq('puzzle_date', targetDate)
                 .eq('completed', true)
                 .order('score', { ascending: false })
-                .order('created_at', { ascending: true })
+                .order('completed_at', { ascending: true })
                 .limit(limit);
 
             if (error) throw error;
@@ -173,7 +181,7 @@ export class GameAPI {
                 username: attempt.profiles.username,
                 score: attempt.score,
                 turnsUsed: attempt.turns_used,
-                completedAt: attempt.created_at
+                completedAt: attempt.completed_at
             }));
         } catch (error) {
             console.error('Get daily leaderboard error:', error);

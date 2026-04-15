@@ -6,7 +6,7 @@ import { MESSAGE_TYPES } from '../constants.js';
 
 export class DailyPuzzle extends Connect5Game {
     constructor() {
-        super();
+        super({ autoInit: false });
 
         this.authManager = new AuthManager();
         this.gameApi = GameAPI;
@@ -17,10 +17,14 @@ export class DailyPuzzle extends Connect5Game {
         // Override some parent properties
         this.gameStarted = false;
         this.gameCompleted = false;
+
+        void this.init();
     }
 
     async init() {
         try {
+            await this.authManager.ready;
+
             // Load today's puzzle
             await this.loadDailyPuzzle();
 
@@ -175,7 +179,7 @@ export class DailyPuzzle extends Connect5Game {
             signInBtn.className = 'clear-btn';
             signInBtn.textContent = 'Sign In to Save Score';
             signInBtn.addEventListener('click', () => {
-                window.location.href = '/?tab=login';
+                window.location.href = 'index.html?tab=login';
             });
             controls.appendChild(signInBtn);
         }
@@ -185,7 +189,7 @@ export class DailyPuzzle extends Connect5Game {
         homeBtn.className = 'new-game-btn';
         homeBtn.textContent = 'Back to Home';
         homeBtn.addEventListener('click', () => {
-            window.location.href = '/';
+            window.location.href = 'index.html';
         });
         controls.appendChild(homeBtn);
     }
@@ -219,7 +223,7 @@ Score: ${score} points
 Turns: ${turnsUsed}/6 ${starRating}
 Status: ${status}
 
-Play today: ${window.location.origin}
+        Play today: ${new URL('daily.html', window.location.href).toString()}
 #Connect5Daily`;
 
         try {
@@ -248,7 +252,7 @@ Play today: ${window.location.origin}
     getStarRating(turnsUsed, completed) {
         if (!completed) return '';
 
-        const starsCount = Math.max(0, 7 - turnsUsed + 1);
+        const starsCount = Math.max(0, this.maxTurns - turnsUsed + 1);
         return '⭐'.repeat(Math.min(starsCount, 5));
     }
 

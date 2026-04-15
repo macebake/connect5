@@ -11,6 +11,7 @@ export class LeaderboardManager {
     }
 
     async init() {
+        await this.authManager.ready;
         await this.loadLeaderboards();
         this.renderLeaderboards();
         this.attachEventListeners();
@@ -150,7 +151,7 @@ export class LeaderboardManager {
                 <div class="entry-score">
                     <div class="score-value">${entry.score.toLocaleString()}</div>
                     ${type === 'daily' && entry.turnsUsed ?
-                        `<div class="score-turns">${entry.turnsUsed}/7 turns</div>` :
+                        `<div class="score-turns">${entry.turnsUsed}/6 turns</div>` :
                         ''
                     }
                 </div>
@@ -244,11 +245,10 @@ export class LeaderboardManager {
             });
         });
 
-        // Home button
-        const homeBtn = document.getElementById('homeBtn');
-        if (homeBtn) {
-            homeBtn.addEventListener('click', () => {
-                window.location.href = '/';
+        const dailyBtn = document.getElementById('dailyBtn');
+        if (dailyBtn) {
+            dailyBtn.addEventListener('click', () => {
+                window.location.href = 'daily.html';
             });
         }
     }

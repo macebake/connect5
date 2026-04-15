@@ -6,7 +6,9 @@ import { UIManager } from './UIManager.js';
 
 // Main Connect5 game class that orchestrates all game systems
 export class Connect5Game {
-    constructor() {
+    constructor(options = {}) {
+        const { autoInit = true } = options;
+
         this.currentTurn = 1;
         this.maxTurns = GAME_CONFIG.MAX_TURNS;
         this.score = 0;
@@ -22,7 +24,9 @@ export class Connect5Game {
         this.wordValidator = new WordValidator();
         this.scoreCalculator = new ScoreCalculator();
         
-        this.init();
+        if (autoInit) {
+            this.init();
+        }
     }
 
     init() {

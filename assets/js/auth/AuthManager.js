@@ -5,15 +5,12 @@ export class AuthManager {
         this.user = null;
         this.profile = null;
         this.listeners = [];
+        this.ready = this.initSession();
 
         // Listen for auth state changes
         supabaseClient.auth.onAuthStateChange((event, session) => {
-            this.user = session?.user || null;
-            this.notifyListeners(event, session);
+            void this.handleSessionChange(event, session);
         });
-
-        // Initialize current session
-        this.initSession();
     }
 
     async initSession() {
@@ -22,7 +19,23 @@ export class AuthManager {
 
         if (this.user) {
             await this.loadProfile();
+        } else {
+            this.profile = null;
         }
+
+        return session;
+    }
+
+    async handleSessionChange(event, session) {
+        this.user = session?.user || null;
+
+        if (this.user) {
+            await this.loadProfile();
+        } else {
+            this.profile = null;
+        }
+
+        this.notifyListeners(event, session);
     }
 
     onAuthStateChange(callback) {
@@ -90,7 +103,8 @@ export class AuthManager {
 
     async resetPassword(email) {
         try {
-            const { error } = await supabaseClient.auth.resetPasswordForEmail(email);
+            const redirectTo = new URL('reset-password.html', window.location.href).toString();
+            const { error } = await supabaseClient.auth.resetPasswordForEmail(email, { redirectTo });
             if (error) throw error;
 
             return { success: true };
@@ -155,7 +169,7 @@ export class AuthManager {
 
     requireAuth() {
         if (!this.isAuthenticated()) {
-            window.location.href = '/';
+            window.location.href = 'index.html?tab=login';
             return false;
         }
         return true;
