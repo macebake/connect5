@@ -1,0 +1,32 @@
+{
+  "date": "2026-04-15",
+  "puzzleNumber": 1,
+  "startTiles": [
+    {
+      "row": 4,
+      "col": 2,
+      "letter": "X"
+    },
+    {
+      "row": 9,
+      "col": 4,
+      "letter": "L"
+    },
+    {
+      "row": 1,
+      "col": 9,
+      "letter": "W"
+    },
+    {
+      "row": 5,
+      "col": 6,
+      "letter": "K"
+    },
+    {
+      "row": 0,
+      "col": 0,
+      "letter": "J"
+    }
+  ],
+  "generatedAt": "2026-04-15T14:55:05.704Z"
+}

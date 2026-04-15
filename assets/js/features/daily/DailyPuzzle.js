@@ -16,13 +16,27 @@ export class DailyPuzzle extends Connect5Game {
     }
 
     async init() {
-        this.loadDailyPuzzle();
-        this.initializeDailyGame();
+        try {
+            await this.loadDailyPuzzle();
+            this.initializeDailyGame();
+        } catch (error) {
+            console.error('Error loading daily puzzle:', error);
+            this.uiManager.showMessage('Today\'s puzzle is not available yet. Daily puzzles reset at 00:00 UTC.', MESSAGE_TYPES.ERROR);
+        }
     }
 
-    loadDailyPuzzle() {
-        const generatedPuzzle = PuzzleGenerator.getPuzzleForDate(this.puzzleDate);
-        this.dailyPuzzleConfig = { startTiles: generatedPuzzle.startTiles };
+    async loadDailyPuzzle() {
+        const response = await fetch(buildAppUrl('assets/data/daily-puzzle.json'), { cache: 'no-store' });
+        if (!response.ok) {
+            throw new Error(`Failed to fetch daily puzzle (${response.status})`);
+        }
+
+        const puzzle = await response.json();
+        if (puzzle.date !== this.puzzleDate || !Array.isArray(puzzle.startTiles)) {
+            throw new Error(`Daily puzzle file is out of date for ${this.puzzleDate}`);
+        }
+
+        this.dailyPuzzleConfig = { startTiles: puzzle.startTiles };
     }
 
     initializeDailyGame() {
@@ -62,7 +76,7 @@ export class DailyPuzzle extends Connect5Game {
             month: 'short',
             day: 'numeric',
             year: 'numeric'
-        })}`;
+        })} · resets at 00:00 UTC`;
         headerDiv.appendChild(dateIndicator);
     }
 
