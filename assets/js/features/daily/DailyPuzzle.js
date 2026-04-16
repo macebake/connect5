@@ -168,12 +168,12 @@ export class DailyPuzzle extends Connect5Game {
 
         if (this.savedResultStatus === 'won') {
             this.uiManager.showMessage(
-                `Today's puzzle is already completed on this device. Final score: ${this.score} | Turns used: ${turnsUsed}/${this.maxTurns}`,
+                `Good job!Come back tomorrow for a new puzzle. Final score today: ${this.score} | Turns used: ${turnsUsed}/${this.maxTurns}`,
                 MESSAGE_TYPES.SUCCESS
             );
         } else {
             this.uiManager.showMessage(
-                `Today's puzzle is already finished on this device. Final score: ${this.score} | Turns used: ${turnsUsed}/${this.maxTurns}`,
+                `Great try. Come back tomorrow for a new puzzle. Final score today: ${this.score} | Turns used: ${turnsUsed}/${this.maxTurns}`,
                 MESSAGE_TYPES.ERROR
             );
         }
@@ -184,7 +184,7 @@ export class DailyPuzzle extends Connect5Game {
 
     async copyShareResult() {
         const shareField = document.getElementById('shareResultText');
-        const shareText = shareField?.value || this.getShareText();
+        const shareText = shareField?.textContent || this.getShareText();
 
         try {
             await navigator.clipboard.writeText(shareText);
@@ -217,18 +217,10 @@ export class DailyPuzzle extends Connect5Game {
         shareLabel.textContent = 'Shareable result';
         sharePanel.appendChild(shareLabel);
 
-        const shareField = document.createElement('textarea');
+        const shareField = document.createElement('pre');
         shareField.id = 'shareResultText';
         shareField.className = 'share-result-box';
-        shareField.readOnly = true;
-        shareField.rows = 3;
-        shareField.value = this.getShareText();
-        shareField.addEventListener('focus', () => {
-            shareField.select();
-        });
-        shareField.addEventListener('click', () => {
-            shareField.select();
-        });
+        shareField.textContent = this.getShareText();
         sharePanel.appendChild(shareField);
 
         controls.appendChild(sharePanel);
@@ -248,9 +240,6 @@ export class DailyPuzzle extends Connect5Game {
             window.location.href = buildAppUrl('index.html');
         });
         controls.appendChild(homeBtn);
-
-        shareField.focus();
-        shareField.select();
     }
 
     async submitWord() {
