@@ -7,6 +7,6 @@ document.addEventListener('DOMContentLoaded', () => {
     new Connect5Game();
 
     document.getElementById('dailyBtn')?.addEventListener('click', () => {
-        window.location.href = buildAppUrl('pages/daily.html');
+        window.location.href = buildAppUrl('index.html');
     });
 });

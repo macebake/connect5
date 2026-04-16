@@ -4,8 +4,8 @@ Connect 5 is a static daily word game. Practice mode is fully local, and the dai
 
 ## Project Structure
 
-- [index.html](/Users/macey/git/connect5/index.html): landing page
-- [pages/daily.html](/Users/macey/git/connect5/pages/daily.html): daily puzzle
+- [index.html](/Users/macey/git/connect5/index.html): daily puzzle homepage
+- [pages/daily.html](/Users/macey/git/connect5/pages/daily.html): redirect for old daily links
 - [pages/practice.html](/Users/macey/git/connect5/pages/practice.html): practice mode
 - [assets/js/app](/Users/macey/git/connect5/assets/js/app): shared config and constants
 - [assets/js/core](/Users/macey/git/connect5/assets/js/core): reusable game engine modules

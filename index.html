@@ -3,41 +3,54 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Connect 5</title>
+    <title>Connect 5 - Daily Challenge</title>
     <link rel="icon" href='data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"%3E%3Ctext y=".9em" font-size="90"%3E%F0%9F%96%90%EF%B8%8F%3C/text%3E%3C/svg%3E'>
     <link rel="stylesheet" href="assets/css/styles.css">
+    <link rel="stylesheet" href="assets/css/daily.css">
 </head>
 <body>
-    <main class="landing-shell">
-        <section class="landing-card">
-            <p class="landing-kicker">Daily Word Game</p>
+    <div class="game-container">
+        <div class="header">
+            <div class="header-left">
+                <button class="nav-btn" id="practiceBtn">Practice</button>
+            </div>
             <h1>Connect 5</h1>
-            <p class="landing-tagline">Connect all five starting tiles in six turns or fewer.</p>
-
-            <div class="landing-actions">
-                <button class="mode-btn" id="playDailyBtn">Play Daily Puzzle</button>
-                <button class="mode-btn secondary-mode-btn" id="playPracticeBtn">Practice Mode</button>
+            <div class="header-nav">
+                <button class="emoji-btn" id="infoBtn">ℹ️</button>
             </div>
+        </div>
 
-            <div class="landing-notes">
-                <div class="landing-note">
-                    <h2>Daily</h2>
-                    <p>Everyone gets the same puzzle. Share how many turns it took.</p>
+        <div class="game-layout">
+            <div class="turn-score-row">
+                <div class="stat-item">
+                    <div class="stat-label">Turn</div>
+                    <div class="stat-value" id="turn">1/6</div>
                 </div>
-                <div class="landing-note">
-                    <h2>Practice</h2>
-                    <p>Unlimited random boards to learn the shape of the game.</p>
+                <div class="stat-item">
+                    <div class="stat-label">Score</div>
+                    <div class="stat-value" id="score">0</div>
                 </div>
             </div>
+        </div>
 
-            <button class="text-link-btn" id="infoBtn">How to play</button>
-        </section>
-    </main>
+        <div class="message info" id="message">Loading daily puzzle...</div>
+        <div class="word-display" id="currentWord"></div>
+
+        <div class="grid-container">
+            <div class="grid" id="grid"></div>
+        </div>
+
+        <div class="controls">
+            <button class="submit-btn" id="submitBtn" disabled>Submit Word</button>
+            <button class="clear-btn" id="clearBtn" disabled>Clear</button>
+            <button class="new-game-btn" id="newGameBtn">New Game</button>
+        </div>
+    </div>
 
     <div class="modal-overlay" id="modalOverlay" style="display: none;">
         <div class="modal">
             <div class="modal-header">
-                <h2>How to Play Connect 5</h2>
+                <h2>How to Play Connect 5 Daily</h2>
                 <button class="modal-close" id="modalClose">×</button>
             </div>
             <div class="modal-content">
@@ -45,16 +58,17 @@
                 <ul>
                     <li>Click an empty cell to start typing.</li>
                     <li>Use arrow keys to move your starting point before you type.</li>
-                    <li>Click the same cell again to switch between horizontal and vertical.</li>
-                    <li>Every word must connect to the existing letters on the board.</li>
+                    <li>Click the same cell again to switch direction.</li>
+                    <li>Words must connect to existing letters.</li>
                     <li>Your turns are only dictionary-checked when all five starting tiles are connected.</li>
-                    <li>Score is based on letter values plus a bonus for unused turns.</li>
-                    <li>The daily puzzle is the same for everyone on that date.</li>
+                    <li>Earn letter points plus 10 bonus points per unused turn.</li>
+                    <li>Starting tiles are black and committed tiles are gray.</li>
+                    <li>The daily puzzle is the same for everyone each day and resets at 00:00 UTC.</li>
                 </ul>
             </div>
         </div>
     </div>
 
-    <script type="module" src="assets/js/pages/home-page.js"></script>
+    <script type="module" src="assets/js/pages/daily-page.js"></script>
 </body>
 </html>
