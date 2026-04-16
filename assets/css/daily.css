@@ -90,7 +90,7 @@
 
 .share-result-label {
     display: block;
-    margin-bottom: 8px;
+    margin-bottom: 6px;
     text-transform: uppercase;
     letter-spacing: 0.5px;
     font-size: 12px;
@@ -99,17 +99,29 @@
 
 .share-result-box {
     width: 100%;
-    min-height: 88px;
-    padding: 12px;
+    min-height: 68px;
+    padding: 10px 12px;
     border: 2px solid #2c2c2c;
     background: #f9f8f6;
     color: #1a1a1a;
     font-family: 'Times New Roman', Georgia, serif;
-    font-size: 16px;
-    line-height: 1.4;
+    font-size: 15px;
+    line-height: 1.3;
     white-space: pre-wrap;
     overflow: hidden;
     margin: 0;
+}
+
+.game-container.completed-state .grid {
+    width: min(100%, 360px);
+}
+
+.game-container.completed-state .controls {
+    gap: 8px;
+}
+
+.game-container.completed-state .controls button {
+    padding: 9px 12px;
 }
 
 .share-result-box:focus {
@@ -136,5 +148,15 @@
     .daily-warning {
         font-size: 0.8rem;
         padding: 0.5rem;
+    }
+
+    .game-container.completed-state .grid {
+        width: min(100%, 320px);
+    }
+
+    .game-container.completed-state .share-result-box {
+        min-height: 58px;
+        font-size: 14px;
+        line-height: 1.25;
     }
 }
