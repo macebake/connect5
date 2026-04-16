@@ -117,12 +117,9 @@ export class DailyPuzzle extends Connect5Game {
     getShareText() {
         const dayNumber = this.getPuzzleNumber();
         const turnsUsed = this.getTurnsUsed();
+        const status = this.gridManager.areAllTilesConnected() ? '✅' : '❌';
 
-        if (this.gridManager.areAllTilesConnected()) {
-            return `I solved Connect 5 #${dayNumber} in ${turnsUsed} turns.\n${this.getShareUrl()}`;
-        }
-
-        return `I played Connect 5 #${dayNumber} in ${turnsUsed} turns.\n${this.getShareUrl()}`;
+        return `Connect5 #${dayNumber}\n${turnsUsed}/6 turns ${status}\nScore ${this.score} 🚀\n${this.getShareUrl()}`;
     }
 
     saveProgress(status = 'in_progress') {
