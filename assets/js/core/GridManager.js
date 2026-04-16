@@ -160,6 +160,63 @@ export class GridManager {
         return formedWords;
     }
 
+    getAllWordsOnBoard() {
+        const words = [];
+        const seen = new Set();
+
+        for (let row = 0; row < this.gridSize; row++) {
+            let col = 0;
+            while (col < this.gridSize) {
+                if (!this.grid[row][col]) {
+                    col++;
+                    continue;
+                }
+
+                const startCol = col;
+                let word = '';
+                while (col < this.gridSize && this.grid[row][col]) {
+                    word += this.grid[row][col];
+                    col++;
+                }
+
+                if (word.length >= GAME_CONFIG.MIN_WORD_LENGTH) {
+                    const key = `H:${row}:${startCol}:${word}`;
+                    if (!seen.has(key)) {
+                        seen.add(key);
+                        words.push(word);
+                    }
+                }
+            }
+        }
+
+        for (let col = 0; col < this.gridSize; col++) {
+            let row = 0;
+            while (row < this.gridSize) {
+                if (!this.grid[row][col]) {
+                    row++;
+                    continue;
+                }
+
+                const startRow = row;
+                let word = '';
+                while (row < this.gridSize && this.grid[row][col]) {
+                    word += this.grid[row][col];
+                    row++;
+                }
+
+                if (word.length >= GAME_CONFIG.MIN_WORD_LENGTH) {
+                    const key = `V:${col}:${startRow}:${word}`;
+                    if (!seen.has(key)) {
+                        seen.add(key);
+                        words.push(word);
+                    }
+                }
+            }
+        }
+
+        return words;
+    }
+
     getWordAt(row, col, direction) {
         if (direction === DIRECTIONS.HORIZONTAL) {
             // Find horizontal word containing this position

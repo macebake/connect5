@@ -302,18 +302,6 @@ export class Connect5Game {
             return;
         }
 
-        // Show loading message while validating
-        this.uiManager.showMessage('Validating words...', MESSAGE_TYPES.INFO);
-
-        // Validate all formed words
-        for (const word of formedWords) {
-            const isValid = await this.wordValidator.isValidWord(word);
-            if (!isValid) {
-                this.uiManager.showMessage(`"${word}" is not a valid word!`, MESSAGE_TYPES.ERROR);
-                return;
-            }
-        }
-        
         if (!this.gridManager.isConnected(this.currentWord)) {
             this.uiManager.showMessage('Word must connect to existing letters!', MESSAGE_TYPES.ERROR);
             return;
@@ -356,10 +344,31 @@ export class Connect5Game {
         
         // Check for win condition: all starting tiles connected
         if (this.gridManager.areAllTilesConnected()) {
-            this.winGame();
+            const boardIsValid = await this.validateCompletedBoard();
+            if (boardIsValid) {
+                this.winGame();
+            } else if (this.currentTurn > this.maxTurns) {
+                this.endGame();
+            }
         } else if (this.currentTurn > this.maxTurns) {
             this.endGame();
         }
+    }
+
+    async validateCompletedBoard() {
+        const boardWords = this.gridManager.getAllWordsOnBoard();
+
+        this.uiManager.showMessage('Checking final board...', MESSAGE_TYPES.INFO);
+
+        for (const word of boardWords) {
+            const isValid = await this.wordValidator.isValidWord(word);
+            if (!isValid) {
+                this.uiManager.showMessage(`All tiles are connected, but the final board includes "${word}". Keep going.`, MESSAGE_TYPES.ERROR);
+                return false;
+            }
+        }
+
+        return true;
     }
 
     winGame() {

@@ -1,6 +1,9 @@
 import { buildAppUrl } from '../app/config.js';
+import { appendAboutLinks } from '../app/about-links.js';
 
 document.addEventListener('DOMContentLoaded', () => {
+    appendAboutLinks();
+
     document.getElementById('playDailyBtn')?.addEventListener('click', () => {
         window.location.href = buildAppUrl('pages/daily.html');
     });
