@@ -30,6 +30,15 @@ body {
     overflow: hidden;
 }
 
+.mobile-input-proxy {
+    position: fixed;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+    pointer-events: none;
+}
+
 .landing-shell {
     width: 100%;
     display: flex;
@@ -852,24 +861,34 @@ button:disabled {
         overflow: hidden;
     }
 
+    .header {
+        display: grid;
+        grid-template-columns: auto auto;
+        align-items: start;
+        justify-content: space-between;
+        gap: 4px 10px;
+        margin-bottom: 8px;
+    }
+
     .header-left,
     .header-nav {
         position: static;
         justify-content: center;
-        margin-bottom: 6px;
-    }
-
-    .header {
-        display: flex;
-        flex-direction: column;
-        gap: 4px;
-        margin-bottom: 8px;
+        margin-bottom: 0;
     }
 
     h1 {
-        font-size: 1.65em;
-        margin-bottom: 6px;
-        padding-bottom: 6px;
+        grid-column: 1 / -1;
+        order: 3;
+        font-size: clamp(1.55rem, 8vw, 2rem);
+        line-height: 1;
+        margin-bottom: 4px;
+        padding-bottom: 5px;
+    }
+
+    .daily-date {
+        margin-top: 0;
+        font-size: 0.75rem;
     }
 
     .controls {
@@ -965,5 +984,27 @@ button:disabled {
 
     .cell.arrow-down::after {
         bottom: -7px;
+    }
+
+    body.typing-active .header,
+    body.typing-active .game-layout {
+        display: none;
+    }
+
+    body.typing-active .message {
+        margin-bottom: 4px;
+        padding: 6px 8px;
+        font-size: 12px;
+    }
+
+    body.typing-active .word-display {
+        min-height: 24px;
+        margin: 0 0 4px;
+        font-size: 18px;
+        letter-spacing: 1px;
+    }
+
+    body.typing-active .grid {
+        width: min(100%, calc(100dvh - 180px), 360px);
     }
 }

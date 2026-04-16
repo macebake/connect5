@@ -12,6 +12,7 @@ export class UIManager {
             submitBtn: document.getElementById('submitBtn'),
             clearBtn: document.getElementById('clearBtn'),
             newGameBtn: document.getElementById('newGameBtn'),
+            mobileInput: document.getElementById('mobileInput'),
             infoBtn: document.getElementById('infoBtn'),
             modalOverlay: document.getElementById('modalOverlay'),
             modalClose: document.getElementById('modalClose')
@@ -68,6 +69,22 @@ export class UIManager {
     setButtonsEnabled(submitEnabled, clearEnabled) {
         this.elements.submitBtn.disabled = !submitEnabled;
         this.elements.clearBtn.disabled = !clearEnabled;
+    }
+
+    focusMobileInput() {
+        this.elements.mobileInput?.focus({ preventScroll: true });
+    }
+
+    clearMobileInput() {
+        if (this.elements.mobileInput) {
+            this.elements.mobileInput.value = '';
+        }
+    }
+
+    syncMobileInput(value) {
+        if (this.elements.mobileInput) {
+            this.elements.mobileInput.value = value;
+        }
     }
 
     showModal() {

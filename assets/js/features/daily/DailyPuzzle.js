@@ -44,6 +44,7 @@ export class DailyPuzzle extends Connect5Game {
     initializeDailyGame() {
         document.querySelector('.game-container')?.classList.remove('completed-state');
         this.placeDailyStartTiles();
+        this.captureInitialPuzzleState();
         this.restoreSavedProgress();
         this.gridManager.renderGrid(this.currentWord, this.isTyping, this.startRow, this.startCol, this.currentDirection);
         this.attachEventListeners();
@@ -295,5 +296,14 @@ export class DailyPuzzle extends Connect5Game {
 
     newGame() {
         this.uiManager.showMessage('New games are not allowed in daily mode.', MESSAGE_TYPES.ERROR);
+    }
+
+    resetPuzzle() {
+        if (this.gameCompleted) {
+            return;
+        }
+
+        super.resetPuzzle();
+        this.saveProgress('in_progress');
     }
 }

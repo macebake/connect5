@@ -35,6 +35,17 @@
 
         <div class="message info" id="message">Click an empty cell to start typing a word</div>
         <div class="word-display" id="currentWord"></div>
+        <input
+            id="mobileInput"
+            class="mobile-input-proxy"
+            type="text"
+            inputmode="text"
+            autocapitalize="characters"
+            autocomplete="off"
+            autocorrect="off"
+            spellcheck="false"
+            aria-label="Type your word"
+        >
 
         <div class="grid-container">
             <div class="grid" id="grid"></div>
@@ -42,7 +53,7 @@
 
         <div class="controls">
             <button class="submit-btn" id="submitBtn" disabled>Submit Word</button>
-            <button class="clear-btn" id="clearBtn" disabled>Clear</button>
+            <button class="clear-btn" id="clearBtn" disabled>Reset</button>
             <button class="new-game-btn" id="newGameBtn">New Game</button>
         </div>
     </div>
@@ -59,8 +70,10 @@
                     <li>Click an empty cell to start typing.</li>
                     <li>Use arrow keys to move your starting point before you type.</li>
                     <li>Click the same cell again to switch direction.</li>
+                    <li>On mobile, tapping a cell opens the keyboard and hides some chrome while you type.</li>
                     <li>Words must connect to existing letters.</li>
                     <li>Your turns are only dictionary-checked when all five starting tiles are connected.</li>
+                    <li>Reset restarts the current practice puzzle from the beginning.</li>
                     <li>Earn letter points plus 10 bonus points per unused turn.</li>
                     <li>Practice mode generates a fresh local puzzle whenever you restart.</li>
                 </ul>
