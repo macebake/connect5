@@ -831,39 +831,43 @@ button:disabled {
     .game-container {
         width: 100vw;
         max-width: none;
-        padding: 14px;
+        padding: 10px 12px;
         border-left: none;
         border-right: none;
-        min-height: 100vh;
+        min-height: 100dvh;
     }
 
     .header-left,
     .header-nav {
         position: static;
         justify-content: center;
-        margin-bottom: 12px;
+        margin-bottom: 6px;
     }
 
     .header {
         display: flex;
         flex-direction: column;
-        gap: 8px;
+        gap: 4px;
+        margin-bottom: 8px;
     }
 
     h1 {
-        font-size: 2em;
+        font-size: 1.65em;
+        margin-bottom: 6px;
+        padding-bottom: 6px;
     }
 
     .controls {
         flex-wrap: wrap;
-        gap: 8px;
+        gap: 6px;
+        margin-bottom: 0;
     }
 
     .controls button,
     .landing-actions button {
         width: 100%;
         min-width: 0;
-        padding: 12px 14px;
+        padding: 10px 12px;
     }
 
     .nav-btn,
@@ -872,26 +876,35 @@ button:disabled {
     }
 
     .word-display {
-        font-size: 22px;
-        min-height: 32px;
+        font-size: 18px;
+        min-height: 24px;
+        margin: 6px 0;
         letter-spacing: 1px;
     }
 
     .grid {
+        width: min(100%, calc(100dvh - 280px));
         padding: 4px;
     }
 
     .game-layout {
-        padding: 8px 0;
+        padding: 6px 0;
+        margin-bottom: 8px;
     }
 
     .stat-item .stat-value {
-        font-size: 1.6em;
+        font-size: 1.35em;
+    }
+
+    .stat-item .stat-label {
+        font-size: 0.72em;
+        margin-bottom: 2px;
     }
 
     .message {
-        padding: 10px;
-        font-size: 14px;
+        padding: 8px;
+        font-size: 13px;
+        margin-bottom: 8px;
     }
 
     .modal {
