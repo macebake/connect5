@@ -116,7 +116,8 @@ export class DailyPuzzle extends Connect5Game {
     }
 
     async copyShareResult() {
-        const shareText = this.getShareText();
+        const shareField = document.getElementById('shareResultText');
+        const shareText = shareField?.value || this.getShareText();
 
         try {
             await navigator.clipboard.writeText(shareText);
@@ -132,14 +133,6 @@ export class DailyPuzzle extends Connect5Game {
         }
     }
 
-    shareToX() {
-        window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(this.getShareText())}`, '_blank', 'noopener,noreferrer');
-    }
-
-    shareToBluesky() {
-        window.open(`https://bsky.app/intent/compose?text=${encodeURIComponent(this.getShareText())}`, '_blank', 'noopener,noreferrer');
-    }
-
     addPostGameOptions() {
         const controls = document.querySelector('.controls');
         if (!controls) {
@@ -148,29 +141,38 @@ export class DailyPuzzle extends Connect5Game {
 
         controls.innerHTML = '';
 
+        const sharePanel = document.createElement('div');
+        sharePanel.className = 'share-result-panel';
+
+        const shareLabel = document.createElement('label');
+        shareLabel.className = 'share-result-label';
+        shareLabel.setAttribute('for', 'shareResultText');
+        shareLabel.textContent = 'Shareable result';
+        sharePanel.appendChild(shareLabel);
+
+        const shareField = document.createElement('textarea');
+        shareField.id = 'shareResultText';
+        shareField.className = 'share-result-box';
+        shareField.readOnly = true;
+        shareField.rows = 3;
+        shareField.value = this.getShareText();
+        shareField.addEventListener('focus', () => {
+            shareField.select();
+        });
+        shareField.addEventListener('click', () => {
+            shareField.select();
+        });
+        sharePanel.appendChild(shareField);
+
+        controls.appendChild(sharePanel);
+
         const copyBtn = document.createElement('button');
         copyBtn.className = 'submit-btn';
-        copyBtn.textContent = 'Copy Result';
+        copyBtn.textContent = 'Copy Shareable Result';
         copyBtn.addEventListener('click', () => {
             void this.copyShareResult();
         });
         controls.appendChild(copyBtn);
-
-        const xBtn = document.createElement('button');
-        xBtn.className = 'clear-btn';
-        xBtn.textContent = 'Share to X';
-        xBtn.addEventListener('click', () => {
-            this.shareToX();
-        });
-        controls.appendChild(xBtn);
-
-        const blueskyBtn = document.createElement('button');
-        blueskyBtn.className = 'clear-btn';
-        blueskyBtn.textContent = 'Share to Bluesky';
-        blueskyBtn.addEventListener('click', () => {
-            this.shareToBluesky();
-        });
-        controls.appendChild(blueskyBtn);
 
         const homeBtn = document.createElement('button');
         homeBtn.className = 'new-game-btn';
@@ -179,6 +181,9 @@ export class DailyPuzzle extends Connect5Game {
             window.location.href = buildAppUrl('index.html');
         });
         controls.appendChild(homeBtn);
+
+        shareField.focus();
+        shareField.select();
     }
 
     winGame() {

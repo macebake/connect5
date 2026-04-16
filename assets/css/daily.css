@@ -84,6 +84,37 @@
     background: #555;
 }
 
+.share-result-panel {
+    width: 100%;
+}
+
+.share-result-label {
+    display: block;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-size: 12px;
+    color: #666;
+}
+
+.share-result-box {
+    width: 100%;
+    min-height: 88px;
+    resize: none;
+    padding: 12px;
+    border: 2px solid #2c2c2c;
+    background: #f9f8f6;
+    color: #1a1a1a;
+    font-family: 'Times New Roman', Georgia, serif;
+    font-size: 16px;
+    line-height: 1.4;
+}
+
+.share-result-box:focus {
+    outline: none;
+    background: #fffdfa;
+}
+
 /* Enhanced modal for daily instructions */
 .modal .modal-content h3 {
     color: #333;
