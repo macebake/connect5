@@ -169,7 +169,7 @@ export class DailyPuzzle extends Connect5Game {
 
         if (this.savedResultStatus === 'won') {
             this.uiManager.showMessage(
-                `Good job!Come back tomorrow for a new puzzle. Final score today: ${this.score} | Turns used: ${turnsUsed}/${this.maxTurns}`,
+                `Good job! Come back tomorrow for a new puzzle. Final score today: ${this.score} | Turns used: ${turnsUsed}/${this.maxTurns}`,
                 MESSAGE_TYPES.SUCCESS
             );
         } else {
