@@ -1,6 +1,7 @@
 import { Connect5Game } from '../../core/Connect5Game.js';
 import { buildAppUrl } from '../../app/config.js';
 import { MESSAGE_TYPES } from '../../app/constants.js';
+import { DailyProgressStore } from './DailyProgressStore.js';
 import { PuzzleGenerator } from './PuzzleGenerator.js';
 
 export class DailyPuzzle extends Connect5Game {
@@ -11,7 +12,7 @@ export class DailyPuzzle extends Connect5Game {
         this.puzzleEpoch = '2026-04-15';
         this.isDaily = true;
         this.gameCompleted = false;
-        this.storageKey = `connect5:daily:${this.puzzleDate}`;
+        this.progressStore = new DailyProgressStore(this.puzzleDate);
 
         void this.init();
     }
@@ -124,38 +125,21 @@ export class DailyPuzzle extends Connect5Game {
         return `I played Connect 5 #${dayNumber} in ${turnsUsed} turns.\n${this.getShareUrl()}`;
     }
 
-    getSavedState() {
-        try {
-            const raw = localStorage.getItem(this.storageKey);
-            return raw ? JSON.parse(raw) : null;
-        } catch (error) {
-            console.warn('Failed to read daily progress from localStorage:', error);
-            return null;
-        }
-    }
-
     saveProgress(status = 'in_progress') {
-        try {
-            const payload = {
-                puzzleDate: this.puzzleDate,
-                status,
-                score: this.score,
-                currentTurn: this.currentTurn,
-                grid: this.gridManager.grid,
-                committedTiles: Array.from(this.gridManager.committedTiles),
-                startTiles: this.gridManager.startTiles,
-                turnsUsed: this.getTurnsUsed()
-            };
-
-            localStorage.setItem(this.storageKey, JSON.stringify(payload));
-        } catch (error) {
-            console.warn('Failed to save daily progress to localStorage:', error);
-        }
+        this.progressStore.save({
+            status,
+            score: this.score,
+            currentTurn: this.currentTurn,
+            grid: this.gridManager.grid,
+            committedTiles: Array.from(this.gridManager.committedTiles),
+            startTiles: this.gridManager.startTiles,
+            turnsUsed: this.getTurnsUsed()
+        });
     }
 
     restoreSavedProgress() {
-        const savedState = this.getSavedState();
-        if (!savedState || savedState.puzzleDate !== this.puzzleDate) {
+        const savedState = this.progressStore.load();
+        if (!savedState) {
             return;
         }
 
