@@ -306,13 +306,13 @@ h1 {
     justify-content: center;
     margin-bottom: 15px;
     width: 100%;
-    overflow-x: auto;
+    overflow: hidden;
 }
 
 .grid {
-    --cell-size: 40px;
     display: grid;
-    grid-template-columns: repeat(10, var(--cell-size));
+    width: min(100%, 418px);
+    grid-template-columns: repeat(10, minmax(0, 1fr));
     gap: 1px;
     background: #2c2c2c;
     padding: 8px;
@@ -323,14 +323,14 @@ h1 {
 }
 
 .cell {
-    width: var(--cell-size);
-    height: var(--cell-size);
+    width: 100%;
+    aspect-ratio: 1 / 1;
     background: #fdfcfa;
     display: flex;
     align-items: center;
     justify-content: center;
     font-weight: bold;
-    font-size: calc(var(--cell-size) * 0.5);
+    font-size: clamp(14px, 4.8vw, 20px);
     font-family: 'Times New Roman', serif;
     cursor: pointer;
     transition: all 0.2s ease;
@@ -376,13 +376,13 @@ h1 {
 
 .cell.arrow::after {
     position: absolute;
-    font-size: 14px;
+    font-size: clamp(10px, 3vw, 14px);
     font-weight: bold;
     color: #1a1a1a;
     background: #fdfcfa;
     border: 1px solid #1a1a1a;
-    width: 16px;
-    height: 16px;
+    width: clamp(12px, 4vw, 16px);
+    height: clamp(12px, 4vw, 16px);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -407,7 +407,7 @@ h1 {
     position: absolute;
     bottom: 2px;
     right: 2px;
-    font-size: calc(var(--cell-size) * 0.25);
+    font-size: clamp(7px, 2vw, 10px);
     color: #666;
 }
 
@@ -877,15 +877,7 @@ button:disabled {
         letter-spacing: 1px;
     }
 
-    .grid-container {
-        margin-left: -14px;
-        margin-right: -14px;
-        padding-left: 7px;
-        padding-right: 7px;
-    }
-
     .grid {
-        --cell-size: min(calc((100vw - 25px) / 10), 36px);
         padding: 4px;
     }
 
@@ -926,12 +918,6 @@ button:disabled {
     .github-badge {
         width: 100%;
         justify-content: center;
-    }
-
-    .cell.arrow::after {
-        width: 14px;
-        height: 14px;
-        font-size: 12px;
     }
 
     .cell.arrow-right::after {
