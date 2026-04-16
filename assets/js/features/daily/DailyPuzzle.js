@@ -214,11 +214,26 @@ export class DailyPuzzle extends Connect5Game {
         const sharePanel = document.createElement('div');
         sharePanel.className = 'share-result-panel';
 
-        const shareLabel = document.createElement('label');
+        const shareHeader = document.createElement('div');
+        shareHeader.className = 'share-result-header';
+
+        const shareLabel = document.createElement('div');
         shareLabel.className = 'share-result-label';
-        shareLabel.setAttribute('for', 'shareResultText');
         shareLabel.textContent = 'Shareable result';
-        sharePanel.appendChild(shareLabel);
+        shareHeader.appendChild(shareLabel);
+
+        const copyBtn = document.createElement('button');
+        copyBtn.className = 'share-copy-btn';
+        copyBtn.type = 'button';
+        copyBtn.setAttribute('aria-label', 'Copy shareable result');
+        copyBtn.title = 'Copy shareable result';
+        copyBtn.textContent = '⧉';
+        copyBtn.addEventListener('click', () => {
+            void this.copyShareResult();
+        });
+        shareHeader.appendChild(copyBtn);
+
+        sharePanel.appendChild(shareHeader);
 
         const shareField = document.createElement('pre');
         shareField.id = 'shareResultText';
@@ -227,22 +242,6 @@ export class DailyPuzzle extends Connect5Game {
         sharePanel.appendChild(shareField);
 
         controls.appendChild(sharePanel);
-
-        const copyBtn = document.createElement('button');
-        copyBtn.className = 'submit-btn';
-        copyBtn.textContent = 'Copy Shareable Result';
-        copyBtn.addEventListener('click', () => {
-            void this.copyShareResult();
-        });
-        controls.appendChild(copyBtn);
-
-        const homeBtn = document.createElement('button');
-        homeBtn.className = 'new-game-btn';
-        homeBtn.textContent = 'Back to Home';
-        homeBtn.addEventListener('click', () => {
-            window.location.href = buildAppUrl('index.html');
-        });
-        controls.appendChild(homeBtn);
     }
 
     async submitWord() {
