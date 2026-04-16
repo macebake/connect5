@@ -11,6 +11,7 @@ export class DailyPuzzle extends Connect5Game {
         this.puzzleEpoch = '2026-04-15';
         this.isDaily = true;
         this.gameCompleted = false;
+        this.storageKey = `connect5:daily:${this.puzzleDate}`;
 
         void this.init();
     }
@@ -41,12 +42,20 @@ export class DailyPuzzle extends Connect5Game {
 
     initializeDailyGame() {
         this.placeDailyStartTiles();
+        this.restoreSavedProgress();
         this.gridManager.renderGrid(this.currentWord, this.isTyping, this.startRow, this.startCol, this.currentDirection);
         this.attachEventListeners();
         this.uiManager.updateStats(this.currentTurn, this.maxTurns, this.score);
-        this.uiManager.showMessage('Click an empty cell to start typing a word', MESSAGE_TYPES.INFO);
         this.addDailyGameModeIndicator();
         this.removeNewGameButton();
+
+        if (this.gameCompleted) {
+            this.showCompletedState();
+            this.addPostGameOptions();
+            return;
+        }
+
+        this.uiManager.showMessage('Click an empty cell to start typing a word', MESSAGE_TYPES.INFO);
     }
 
     placeDailyStartTiles() {
@@ -113,6 +122,83 @@ export class DailyPuzzle extends Connect5Game {
         }
 
         return `I played Connect 5 #${dayNumber} in ${turnsUsed} turns.\n${this.getShareUrl()}`;
+    }
+
+    getSavedState() {
+        try {
+            const raw = localStorage.getItem(this.storageKey);
+            return raw ? JSON.parse(raw) : null;
+        } catch (error) {
+            console.warn('Failed to read daily progress from localStorage:', error);
+            return null;
+        }
+    }
+
+    saveProgress(status = 'in_progress') {
+        try {
+            const payload = {
+                puzzleDate: this.puzzleDate,
+                status,
+                score: this.score,
+                currentTurn: this.currentTurn,
+                grid: this.gridManager.grid,
+                committedTiles: Array.from(this.gridManager.committedTiles),
+                startTiles: this.gridManager.startTiles,
+                turnsUsed: this.getTurnsUsed()
+            };
+
+            localStorage.setItem(this.storageKey, JSON.stringify(payload));
+        } catch (error) {
+            console.warn('Failed to save daily progress to localStorage:', error);
+        }
+    }
+
+    restoreSavedProgress() {
+        const savedState = this.getSavedState();
+        if (!savedState || savedState.puzzleDate !== this.puzzleDate) {
+            return;
+        }
+
+        if (Array.isArray(savedState.grid)) {
+            this.gridManager.grid = savedState.grid.map((row) => [...row]);
+        }
+
+        if (Array.isArray(savedState.committedTiles)) {
+            this.gridManager.committedTiles = new Set(savedState.committedTiles);
+        }
+
+        if (Array.isArray(savedState.startTiles)) {
+            this.gridManager.startTiles = [...savedState.startTiles];
+        }
+
+        this.score = typeof savedState.score === 'number' ? savedState.score : 0;
+        this.currentTurn = typeof savedState.currentTurn === 'number' ? savedState.currentTurn : 1;
+
+        if (savedState.status === 'won' || savedState.status === 'lost') {
+            this.gameCompleted = true;
+            this.gameOver = true;
+            this.savedResultStatus = savedState.status;
+            this.savedTurnsUsed = savedState.turnsUsed ?? this.getTurnsUsed();
+        }
+    }
+
+    showCompletedState() {
+        const turnsUsed = this.savedTurnsUsed ?? this.getTurnsUsed();
+
+        if (this.savedResultStatus === 'won') {
+            this.uiManager.showMessage(
+                `Today's puzzle is already completed on this device. Final score: ${this.score} | Turns used: ${turnsUsed}/${this.maxTurns}`,
+                MESSAGE_TYPES.SUCCESS
+            );
+        } else {
+            this.uiManager.showMessage(
+                `Today's puzzle is already finished on this device. Final score: ${this.score} | Turns used: ${turnsUsed}/${this.maxTurns}`,
+                MESSAGE_TYPES.ERROR
+            );
+        }
+
+        this.uiManager.setButtonsEnabled(false, false);
+        this.uiManager.updateCurrentWordDisplay('');
     }
 
     async copyShareResult() {
@@ -186,9 +272,39 @@ export class DailyPuzzle extends Connect5Game {
         shareField.select();
     }
 
+    async submitWord() {
+        if (this.gameCompleted) {
+            return;
+        }
+
+        const previousTurn = this.currentTurn;
+        const previousScore = this.score;
+        const previousGameOver = this.gameOver;
+
+        await super.submitWord();
+
+        const progressed =
+            this.currentTurn !== previousTurn ||
+            this.score !== previousScore ||
+            this.gameOver !== previousGameOver;
+
+        if (!progressed) {
+            return;
+        }
+
+        if (this.gameCompleted) {
+            return;
+        }
+
+        this.saveProgress('in_progress');
+    }
+
     winGame() {
         super.winGame();
         this.gameCompleted = true;
+        this.savedResultStatus = 'won';
+        this.savedTurnsUsed = this.getTurnsUsed();
+        this.saveProgress('won');
         setTimeout(() => {
             this.addPostGameOptions();
         }, 800);
@@ -197,6 +313,9 @@ export class DailyPuzzle extends Connect5Game {
     endGame() {
         super.endGame();
         this.gameCompleted = true;
+        this.savedResultStatus = 'lost';
+        this.savedTurnsUsed = this.getTurnsUsed();
+        this.saveProgress('lost');
         setTimeout(() => {
             this.addPostGameOptions();
         }, 800);
