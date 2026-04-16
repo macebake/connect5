@@ -835,6 +835,8 @@ button:disabled {
         border-left: none;
         border-right: none;
         min-height: 100dvh;
+        display: flex;
+        flex-direction: column;
     }
 
     .header-left,
@@ -861,6 +863,7 @@ button:disabled {
         flex-wrap: wrap;
         gap: 6px;
         margin-bottom: 0;
+        flex: 0 0 auto;
     }
 
     .controls button,
@@ -880,16 +883,25 @@ button:disabled {
         min-height: 24px;
         margin: 6px 0;
         letter-spacing: 1px;
+        flex: 0 0 auto;
+    }
+
+    .grid-container {
+        flex: 1 1 auto;
+        min-height: 0;
+        align-items: center;
+        margin-bottom: 8px;
     }
 
     .grid {
-        width: min(100%, calc(100dvh - 280px));
+        width: min(100%, calc(100dvh - 340px), 360px);
         padding: 4px;
     }
 
     .game-layout {
         padding: 6px 0;
         margin-bottom: 8px;
+        flex: 0 0 auto;
     }
 
     .stat-item .stat-value {
@@ -905,6 +917,7 @@ button:disabled {
         padding: 8px;
         font-size: 13px;
         margin-bottom: 8px;
+        flex: 0 0 auto;
     }
 
     .modal {
