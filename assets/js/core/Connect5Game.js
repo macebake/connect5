@@ -42,6 +42,7 @@ export class Connect5Game {
         );
         this.attachEventListeners();
         this.uiManager.updateStats(this.currentTurn, this.maxTurns, this.score);
+        this.uiManager.setButtonsEnabled(false, true);
         this.uiManager.showMessage('Click an empty cell to start typing a word', MESSAGE_TYPES.INFO);
     }
 
@@ -382,7 +383,7 @@ export class Connect5Game {
             this.currentDirection = null;
             this.startRow = null;
             this.startCol = null;
-            this.uiManager.setButtonsEnabled(false, false);
+            this.uiManager.setButtonsEnabled(false, !this.gameOver);
             this.uiManager.showMessage('Word cleared. Click a cell to start a new word.', MESSAGE_TYPES.INFO);
             document.body.classList.remove('typing-active');
         }
@@ -432,6 +433,12 @@ export class Connect5Game {
         }
 
         const totalTurnScore = this.scoreCalculator.calculateTotalTurnScore(this.currentWord, formedWords);
+        const turnSnapshot = {
+            score: this.score,
+            currentTurn: this.currentTurn,
+            grid: this.gridManager.grid.map((row) => [...row]),
+            committedTiles: new Set(this.gridManager.committedTiles)
+        };
         this.score += totalTurnScore;
 
         for (const tile of this.currentWord) {
@@ -450,7 +457,7 @@ export class Connect5Game {
         this.startRow = null;
         this.startCol = null;
 
-        this.uiManager.setButtonsEnabled(false, false);
+        this.uiManager.setButtonsEnabled(false, true);
         this.uiManager.updateCurrentWordDisplay('');
         this.uiManager.clearMobileInput();
         document.body.classList.remove('typing-active');
@@ -470,12 +477,40 @@ export class Connect5Game {
             const boardIsValid = await this.validateCompletedBoard();
             if (boardIsValid) {
                 this.winGame();
-            } else if (this.currentTurn > this.maxTurns) {
+            } else if (turnSnapshot.currentTurn >= this.maxTurns) {
+                this.restoreTurnSnapshot(turnSnapshot);
                 this.endGame();
+            } else {
+                this.restoreTurnSnapshot(turnSnapshot);
             }
         } else if (this.currentTurn > this.maxTurns) {
             this.endGame();
         }
+    }
+
+    restoreTurnSnapshot(snapshot) {
+        this.score = snapshot.score;
+        this.currentTurn = snapshot.currentTurn;
+        this.gridManager.grid = snapshot.grid.map((row) => [...row]);
+        this.gridManager.committedTiles = new Set(snapshot.committedTiles);
+        this.currentWord = [];
+        this.isTyping = false;
+        this.currentDirection = null;
+        this.startRow = null;
+        this.startCol = null;
+
+        this.uiManager.updateStats(this.currentTurn, this.maxTurns, this.score);
+        this.uiManager.updateCurrentWordDisplay('');
+        this.uiManager.clearMobileInput();
+        this.uiManager.setButtonsEnabled(false, true);
+        document.body.classList.remove('typing-active');
+        this.gridManager.renderGrid(
+            this.currentWord,
+            this.isTyping,
+            this.startRow,
+            this.startCol,
+            this.currentDirection
+        );
     }
 
     async validateCompletedBoard() {
@@ -571,7 +606,7 @@ export class Connect5Game {
         this.gridManager.startTiles = [...this.initialPuzzleState.startTiles];
         this.gridManager.committedTiles = new Set();
 
-        this.uiManager.setButtonsEnabled(false, false);
+        this.uiManager.setButtonsEnabled(false, true);
         this.uiManager.updateCurrentWordDisplay('');
         this.uiManager.clearMobileInput();
         this.uiManager.updateStats(this.currentTurn, this.maxTurns, this.score);
