@@ -1,32 +1,32 @@
 {
-  "date": "2026-05-30",
-  "puzzleNumber": 46,
+  "date": "2026-05-31",
+  "puzzleNumber": 47,
   "startTiles": [
     {
-      "row": 6,
-      "col": 3,
-      "letter": "O"
-    },
-    {
       "row": 4,
-      "col": 1,
-      "letter": "H"
+      "col": 6,
+      "letter": "Q"
     },
     {
-      "row": 9,
+      "row": 6,
+      "col": 6,
+      "letter": "W"
+    },
+    {
+      "row": 7,
+      "col": 4,
+      "letter": "P"
+    },
+    {
+      "row": 1,
       "col": 5,
-      "letter": "M"
+      "letter": "D"
     },
     {
-      "row": 3,
+      "row": 5,
       "col": 8,
-      "letter": "V"
-    },
-    {
-      "row": 9,
-      "col": 0,
-      "letter": "H"
+      "letter": "C"
     }
   ],
-  "generatedAt": "2026-05-30T01:11:57.204Z"
+  "generatedAt": "2026-05-31T01:20:44.373Z"
 }
