@@ -1,21 +1,21 @@
 {
-  "date": "2026-06-12",
-  "puzzleNumber": 59,
+  "date": "2026-06-13",
+  "puzzleNumber": 60,
   "startTiles": [
-    {
-      "row": 5,
-      "col": 7,
-      "letter": "E"
-    },
     {
       "row": 2,
       "col": 4,
-      "letter": "B"
+      "letter": "N"
     },
     {
-      "row": 8,
-      "col": 9,
-      "letter": "P"
+      "row": 2,
+      "col": 7,
+      "letter": "H"
+    },
+    {
+      "row": 9,
+      "col": 6,
+      "letter": "S"
     },
     {
       "row": 5,
@@ -23,10 +23,10 @@
       "letter": "G"
     },
     {
-      "row": 1,
-      "col": 8,
-      "letter": "L"
+      "row": 9,
+      "col": 3,
+      "letter": "H"
     }
   ],
-  "generatedAt": "2026-06-12T01:23:57.994Z"
+  "generatedAt": "2026-06-13T01:21:41.869Z"
 }
