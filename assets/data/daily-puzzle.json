@@ -1,32 +1,32 @@
 {
-  "date": "2026-07-10",
-  "puzzleNumber": 87,
+  "date": "2026-07-11",
+  "puzzleNumber": 88,
   "startTiles": [
     {
-      "row": 8,
-      "col": 7,
-      "letter": "G"
-    },
-    {
-      "row": 6,
-      "col": 9,
-      "letter": "O"
-    },
-    {
       "row": 1,
-      "col": 1,
+      "col": 5,
+      "letter": "N"
+    },
+    {
+      "row": 8,
+      "col": 8,
+      "letter": "Z"
+    },
+    {
+      "row": 5,
+      "col": 2,
       "letter": "L"
     },
     {
       "row": 1,
-      "col": 8,
-      "letter": "R"
+      "col": 7,
+      "letter": "C"
     },
     {
-      "row": 5,
-      "col": 7,
-      "letter": "F"
+      "row": 4,
+      "col": 6,
+      "letter": "P"
     }
   ],
-  "generatedAt": "2026-07-10T00:55:40.157Z"
+  "generatedAt": "2026-07-11T00:49:02.990Z"
 }
