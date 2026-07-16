@@ -1,32 +1,32 @@
 {
-  "date": "2026-07-15",
-  "puzzleNumber": 92,
+  "date": "2026-07-16",
+  "puzzleNumber": 93,
   "startTiles": [
     {
-      "row": 9,
-      "col": 2,
-      "letter": "V"
+      "row": 7,
+      "col": 0,
+      "letter": "S"
     },
     {
-      "row": 6,
-      "col": 6,
+      "row": 1,
+      "col": 9,
+      "letter": "O"
+    },
+    {
+      "row": 8,
+      "col": 9,
       "letter": "I"
     },
     {
-      "row": 0,
-      "col": 1,
-      "letter": "D"
-    },
-    {
-      "row": 0,
-      "col": 7,
-      "letter": "P"
+      "row": 6,
+      "col": 9,
+      "letter": "M"
     },
     {
       "row": 3,
-      "col": 1,
-      "letter": "D"
+      "col": 0,
+      "letter": "U"
     }
   ],
-  "generatedAt": "2026-07-15T00:44:43.116Z"
+  "generatedAt": "2026-07-16T00:48:15.839Z"
 }
