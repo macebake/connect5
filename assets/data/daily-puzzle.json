@@ -1,32 +1,32 @@
 {
-  "date": "2026-08-13",
-  "puzzleNumber": 121,
+  "date": "2026-08-14",
+  "puzzleNumber": 122,
   "startTiles": [
     {
-      "row": 1,
-      "col": 3,
-      "letter": "Q"
-    },
-    {
-      "row": 6,
-      "col": 1,
-      "letter": "N"
-    },
-    {
-      "row": 5,
-      "col": 7,
-      "letter": "P"
-    },
-    {
       "row": 2,
-      "col": 5,
-      "letter": "H"
+      "col": 8,
+      "letter": "T"
     },
     {
       "row": 8,
       "col": 9,
-      "letter": "V"
+      "letter": "S"
+    },
+    {
+      "row": 4,
+      "col": 4,
+      "letter": "F"
+    },
+    {
+      "row": 0,
+      "col": 3,
+      "letter": "B"
+    },
+    {
+      "row": 4,
+      "col": 8,
+      "letter": "R"
     }
   ],
-  "generatedAt": "2026-08-13T02:35:20.186Z"
+  "generatedAt": "2026-08-14T02:33:32.992Z"
 }
