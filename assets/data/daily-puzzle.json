@@ -1,32 +1,32 @@
 {
-  "date": "2026-08-30",
-  "puzzleNumber": 138,
+  "date": "2026-08-31",
+  "puzzleNumber": 139,
   "startTiles": [
     {
+      "row": 9,
+      "col": 6,
+      "letter": "D"
+    },
+    {
       "row": 0,
+      "col": 6,
+      "letter": "D"
+    },
+    {
+      "row": 4,
       "col": 7,
       "letter": "N"
     },
     {
       "row": 2,
-      "col": 2,
-      "letter": "B"
-    },
-    {
-      "row": 9,
-      "col": 1,
-      "letter": "I"
-    },
-    {
-      "row": 3,
-      "col": 6,
+      "col": 0,
       "letter": "N"
     },
     {
-      "row": 6,
-      "col": 7,
-      "letter": "P"
+      "row": 5,
+      "col": 2,
+      "letter": "T"
     }
   ],
-  "generatedAt": "2026-08-30T05:10:42.731Z"
+  "generatedAt": "2026-08-31T05:18:42.094Z"
 }
