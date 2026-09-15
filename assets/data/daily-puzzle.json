@@ -1,32 +1,32 @@
 {
-  "date": "2026-09-14",
-  "puzzleNumber": 153,
+  "date": "2026-09-15",
+  "puzzleNumber": 154,
   "startTiles": [
     {
-      "row": 0,
-      "col": 0,
-      "letter": "Y"
-    },
-    {
       "row": 1,
-      "col": 7,
-      "letter": "M"
+      "col": 6,
+      "letter": "V"
     },
     {
-      "row": 3,
-      "col": 3,
-      "letter": "B"
+      "row": 5,
+      "col": 2,
+      "letter": "L"
     },
     {
       "row": 4,
-      "col": 5,
-      "letter": "R"
+      "col": 6,
+      "letter": "U"
     },
     {
-      "row": 9,
+      "row": 7,
       "col": 7,
-      "letter": "I"
+      "letter": "G"
+    },
+    {
+      "row": 2,
+      "col": 4,
+      "letter": "P"
     }
   ],
-  "generatedAt": "2026-09-14T04:41:13.533Z"
+  "generatedAt": "2026-09-15T04:42:12.619Z"
 }
