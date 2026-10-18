@@ -1,32 +1,32 @@
 {
-  "date": "2026-10-17",
-  "puzzleNumber": 186,
+  "date": "2026-10-18",
+  "puzzleNumber": 187,
   "startTiles": [
     {
-      "row": 6,
-      "col": 2,
-      "letter": "G"
+      "row": 5,
+      "col": 4,
+      "letter": "M"
     },
     {
-      "row": 4,
-      "col": 5,
-      "letter": "E"
-    },
-    {
-      "row": 6,
-      "col": 5,
-      "letter": "Y"
+      "row": 1,
+      "col": 4,
+      "letter": "C"
     },
     {
       "row": 2,
-      "col": 5,
-      "letter": "Y"
+      "col": 2,
+      "letter": "H"
     },
     {
-      "row": 5,
-      "col": 9,
-      "letter": "N"
+      "row": 8,
+      "col": 2,
+      "letter": "I"
+    },
+    {
+      "row": 9,
+      "col": 6,
+      "letter": "Y"
     }
   ],
-  "generatedAt": "2026-10-17T04:08:27.035Z"
+  "generatedAt": "2026-10-18T04:15:52.405Z"
 }
