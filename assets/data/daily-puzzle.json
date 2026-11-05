@@ -1,32 +1,32 @@
 {
-  "date": "2026-11-04",
-  "puzzleNumber": 204,
+  "date": "2026-11-05",
+  "puzzleNumber": 205,
   "startTiles": [
     {
-      "row": 8,
-      "col": 7,
-      "letter": "B"
-    },
-    {
-      "row": 3,
-      "col": 0,
-      "letter": "D"
-    },
-    {
-      "row": 6,
-      "col": 3,
-      "letter": "M"
-    },
-    {
-      "row": 2,
-      "col": 4,
-      "letter": "N"
+      "row": 0,
+      "col": 1,
+      "letter": "E"
     },
     {
       "row": 6,
       "col": 9,
-      "letter": "E"
+      "letter": "Y"
+    },
+    {
+      "row": 3,
+      "col": 3,
+      "letter": "N"
+    },
+    {
+      "row": 9,
+      "col": 0,
+      "letter": "D"
+    },
+    {
+      "row": 4,
+      "col": 5,
+      "letter": "D"
     }
   ],
-  "generatedAt": "2026-11-04T05:59:09.281Z"
+  "generatedAt": "2026-11-05T06:24:50.752Z"
 }
