@@ -1,32 +1,32 @@
 {
-  "date": "2026-11-12",
-  "puzzleNumber": 212,
+  "date": "2026-11-13",
+  "puzzleNumber": 213,
   "startTiles": [
     {
-      "row": 6,
-      "col": 2,
-      "letter": "N"
+      "row": 8,
+      "col": 4,
+      "letter": "F"
     },
     {
       "row": 5,
-      "col": 7,
-      "letter": "G"
+      "col": 6,
+      "letter": "Q"
     },
     {
       "row": 9,
       "col": 7,
-      "letter": "N"
+      "letter": "P"
     },
     {
-      "row": 2,
+      "row": 6,
+      "col": 3,
+      "letter": "R"
+    },
+    {
+      "row": 1,
       "col": 1,
-      "letter": "E"
-    },
-    {
-      "row": 7,
-      "col": 8,
-      "letter": "U"
+      "letter": "A"
     }
   ],
-  "generatedAt": "2026-11-12T06:57:47.153Z"
+  "generatedAt": "2026-11-13T06:21:47.831Z"
 }
