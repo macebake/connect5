@@ -1,32 +1,32 @@
 {
-  "date": "2026-11-27",
-  "puzzleNumber": 227,
+  "date": "2026-11-28",
+  "puzzleNumber": 228,
   "startTiles": [
     {
       "row": 9,
-      "col": 3,
-      "letter": "V"
-    },
-    {
-      "row": 5,
-      "col": 9,
-      "letter": "E"
+      "col": 4,
+      "letter": "L"
     },
     {
       "row": 3,
       "col": 8,
-      "letter": "B"
+      "letter": "I"
     },
     {
       "row": 5,
-      "col": 3,
-      "letter": "F"
+      "col": 1,
+      "letter": "V"
     },
     {
-      "row": 5,
-      "col": 0,
-      "letter": "G"
+      "row": 8,
+      "col": 6,
+      "letter": "M"
+    },
+    {
+      "row": 3,
+      "col": 4,
+      "letter": "H"
     }
   ],
-  "generatedAt": "2026-11-27T08:02:10.474Z"
+  "generatedAt": "2026-11-28T07:30:33.681Z"
 }
